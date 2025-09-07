@@ -35,6 +35,7 @@ axios.interceptors.response.use(
 );
 
 const API = config.apiUrl;
+console.log('API URL:', API);
 
 // Auth Context with enhanced security
 const AuthContext = createContext();
