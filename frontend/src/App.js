@@ -1173,6 +1173,550 @@ const CustomerManagement = () => {
   );
 };
 
+// Monthly Calendar Component for Milk Delivery Tracking
+const MonthlyCalendarView = ({ customer }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [deliveries, setDeliveries] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [editingDate, setEditingDate] = useState(null);
+  const [editQuantity, setEditQuantity] = useState('');
+
+  // Get days in current month
+  const getDaysInMonth = useCallback((date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+    
+    const days = [];
+    
+    // Add empty cells for days before the first day of the month
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      days.push(null);
+    }
+    
+    // Add all days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      days.push(day);
+    }
+    
+    return days;
+  }, []);
+
+  // Fetch deliveries for the current month
+  const fetchMonthlyDeliveries = useCallback(async () => {
+    if (!customer) return;
+    
+    setLoading(true);
+    try {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const startDate = new Date(year, month, 1);
+      const endDate = new Date(year, month + 1, 0);
+      
+      const response = await axios.get(`${API}/deliveries?customer_id=${customer.id}&start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`);
+      
+      // Convert array to object with date as key
+      const deliveryMap = {};
+      response.data.forEach(delivery => {
+        const date = new Date(delivery.delivery_date).getDate();
+        deliveryMap[date] = delivery;
+      });
+      
+      setDeliveries(deliveryMap);
+      console.log('Fetched deliveries:', deliveryMap);
+    } catch (error) {
+      console.error('Error fetching deliveries:', error);
+      alert('Error loading deliveries: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  }, [customer, currentDate]);
+
+  useEffect(() => {
+    fetchMonthlyDeliveries();
+  }, [fetchMonthlyDeliveries]);
+
+  // Handle quantity edit - only edit existing deliveries, no new additions
+  const handleQuantityEdit = async (day) => {
+    if (!customer || !editQuantity) return;
+    
+    // Only allow editing if there's an existing delivery for this day
+    if (!deliveries[day]) {
+      alert('Cannot add new delivery. Only existing deliveries can be edited.');
+      setEditingDate(null);
+      setEditQuantity('');
+      return;
+    }
+    
+    try {
+      // Update existing delivery only
+      const response = await axios.put(`${API}/deliveries/${deliveries[day].id}`, {
+        quantity: parseFloat(editQuantity)
+      });
+      console.log('Update response:', response);
+      
+      setEditingDate(null);
+      setEditQuantity('');
+      await fetchMonthlyDeliveries();
+    } catch (error) {
+      console.error('Error updating delivery:', error);
+      alert('Error saving delivery: ' + (error.response?.data?.detail || error.message));
+    }
+  };
+
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const days = getDaysInMonth(currentDate);
+
+  const navigateMonth = (direction) => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(newDate.getMonth() + direction);
+    setCurrentDate(newDate);
+  };
+
+  if (!customer) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-500">Select a customer to view monthly delivery calendar</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">{customer.name}</h2>
+          <p className="text-sm text-gray-500">Monthly Delivery Calendar</p>
+        </div>
+        
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={() => navigateMonth(-1)}
+            className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+          >
+            ← Previous
+          </button>
+          
+          <h3 className="text-lg font-semibold text-gray-900 min-w-[150px] text-center">
+            {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+          </h3>
+          
+          <button
+            onClick={() => navigateMonth(1)}
+            className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+          >
+            Next →
+          </button>
+        </div>
+      </div>
+
+      {/* Edit-only Mode Notice */}
+      <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="flex items-center space-x-2">
+          <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+          </svg>
+          <p className="text-sm text-blue-800">
+            <span className="font-semibold">Edit-only Mode:</span> You can only edit existing deliveries. Click on days with milk deliveries to modify quantities.
+          </p>
+        </div>
+      </div>
+
+      {/* Customer Info */}
+      <div className="grid grid-cols-4 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+        <div className="text-center">
+          <p className="text-sm text-gray-500">Daily Quantity</p>
+          <p className="font-semibold text-gray-900">{customer.daily_quantity}L</p>
+        </div>
+        <div className="text-center">
+          <p className="text-sm text-gray-500">Rate per Liter</p>
+          <p className="font-semibold text-gray-900">₹{customer.rate_per_liter}</p>
+        </div>
+        <div className="text-center">
+          <p className="text-sm text-gray-500">Milk Type</p>
+          <p className="font-semibold text-gray-900 capitalize">{customer.milk_type}</p>
+        </div>
+        <div className="text-center">
+          <p className="text-sm text-gray-500">Monthly Target</p>
+          <p className="font-semibold text-gray-900">{(customer.daily_quantity * days.filter(d => d !== null).length).toFixed(1)}L</p>
+        </div>
+      </div>
+
+      {/* Calendar */}
+      <div className="border border-gray-200 rounded-lg overflow-hidden">
+        {/* Week day headers */}
+        <div className="grid grid-cols-7 bg-gray-100">
+          {weekDays.map(day => (
+            <div key={day} className="p-3 text-center font-semibold text-gray-700 border-b border-gray-200">
+              {day}
+            </div>
+          ))}
+        </div>
+
+        {/* Calendar days */}
+        <div className="grid grid-cols-7">
+          {days.map((day, index) => (
+            <div
+              key={index}
+              className={`min-h-[100px] p-2 border-b border-r border-gray-200 ${
+                day === null ? 'bg-gray-50' : 'bg-white hover:bg-gray-50'
+              }`}
+            >
+              {day && (
+                <div className="h-full flex flex-col">
+                  {/* Day number */}
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-sm font-medium text-gray-900">{day}</span>
+                    <button
+                      onClick={() => {
+                        setEditingDate(day);
+                        setEditQuantity(deliveries[day]?.quantity?.toString() || customer.daily_quantity.toString());
+                      }}
+                      className="text-xs text-blue-600 hover:text-blue-800 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      Edit
+                    </button>
+                  </div>
+
+                  {/* Delivery info */}
+                  {editingDate === day ? (
+                    <div className="flex-1">
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={editQuantity}
+                        onChange={(e) => setEditQuantity(e.target.value)}
+                        className="w-full p-1 text-xs border border-gray-300 rounded"
+                        placeholder="Quantity"
+                        autoFocus
+                      />
+                      <div className="flex gap-1 mt-1">
+                        <button
+                          onClick={() => handleQuantityEdit(day)}
+                          className="flex-1 px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => {
+                            setEditingDate(null);
+                            setEditQuantity('');
+                          }}
+                          className="flex-1 px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex-1 group cursor-pointer" onClick={() => {
+                      // Only allow editing if there's an existing delivery
+                      if (deliveries[day]) {
+                        setEditingDate(day);
+                        setEditQuantity(deliveries[day]?.quantity?.toString() || customer.daily_quantity.toString());
+                      }
+                    }}>
+                      {deliveries[day] ? (
+                        <div>
+                          <div className="text-xs font-semibold text-green-600 mb-1">
+                            {deliveries[day].quantity}L
+                          </div>
+                          <div className={`text-xs px-2 py-1 rounded-full text-center ${
+                            deliveries[day].status === 'delivered' 
+                              ? 'bg-green-100 text-green-800' 
+                              : deliveries[day].status === 'pending'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            {deliveries[day].status}
+                          </div>
+                          <div className="text-xs text-gray-500 mt-1">
+                            ₹{(deliveries[day].quantity * customer.rate_per_liter).toFixed(2)}
+                          </div>
+                          <div className="text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                            Click to edit
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <div className="text-xs text-gray-400 mb-1">No delivery</div>
+                          <div className="text-xs text-gray-300">
+                            Edit only mode
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Monthly Summary */}
+      <div className="mt-6 grid grid-cols-4 gap-4 p-4 bg-blue-50 rounded-lg">
+        <div className="text-center">
+          <p className="text-sm text-blue-600">Total Delivered</p>
+          <p className="font-bold text-blue-900">
+            {Object.values(deliveries)
+              .filter(d => d.status === 'delivered')
+              .reduce((sum, d) => sum + d.quantity, 0)
+              .toFixed(1)}L
+          </p>
+        </div>
+        <div className="text-center">
+          <p className="text-sm text-blue-600">Pending Deliveries</p>
+          <p className="font-bold text-blue-900">
+            {Object.values(deliveries)
+              .filter(d => d.status === 'pending').length}
+          </p>
+        </div>
+        <div className="text-center">
+          <p className="text-sm text-blue-600">Monthly Revenue</p>
+          <p className="font-bold text-blue-900">
+            ₹{Object.values(deliveries)
+              .filter(d => d.status === 'delivered')
+              .reduce((sum, d) => sum + (d.quantity * customer.rate_per_liter), 0)
+              .toFixed(2)}
+          </p>
+        </div>
+        <div className="text-center">
+          <p className="text-sm text-blue-600">Completion Rate</p>
+          <p className="font-bold text-blue-900">
+            {Object.values(deliveries).length > 0 
+              ? ((Object.values(deliveries).filter(d => d.status === 'delivered').length / Object.values(deliveries).length) * 100).toFixed(1)
+              : '0'
+            }%
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Enhanced Customer Management with Calendar View
+const CustomerManagementWithCalendar = () => {
+  const [customers, setCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchCustomers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await apiCall('/customers');
+      setCustomers(response.data);
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCustomers();
+  }, [fetchCustomers]);
+
+  const filteredCustomers = useMemo(() => {
+    if (!searchTerm) return customers;
+    return customers.filter(customer =>
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.phone.includes(searchTerm)
+    );
+  }, [customers, searchTerm]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold text-gray-900">
+            Professional Customer Management
+          </h1>
+          
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setViewMode('list')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                viewMode === 'list'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              📋 List View
+            </button>
+            <button
+              onClick={() => setViewMode('calendar')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                viewMode === 'calendar'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              📅 Calendar View
+            </button>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search customers by name, email, or phone..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {viewMode === 'list' ? (
+        /* List View */
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">Customer List</h2>
+            <p className="text-sm text-gray-500">Click on a customer name to view monthly calendar</p>
+          </div>
+          
+          {filteredCustomers.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500">No customers found</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Milk Details</th>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Daily Quantity</th>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rate</th>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredCustomers.map((customer) => (
+                    <tr key={customer.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="py-4 px-6">
+                        <div>
+                          <button
+                            onClick={() => {
+                              setSelectedCustomer(customer);
+                              setViewMode('calendar');
+                            }}
+                            className="font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                          >
+                            {customer.name}
+                          </button>
+                          <div className="text-sm text-gray-500 truncate max-w-xs">{customer.address}</div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="text-sm">
+                          <div className="text-gray-900">{customer.email}</div>
+                          <div className="text-gray-500">{customer.phone}</div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <span className="capitalize bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                          {customer.milk_type}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6 text-gray-700 font-semibold">{customer.daily_quantity}L</td>
+                      <td className="py-4 px-6 text-gray-700 font-semibold">₹{customer.rate_per_liter}</td>
+                      <td className="py-4 px-6">
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          customer.is_active 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {customer.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6">
+                        <button
+                          onClick={() => {
+                            setSelectedCustomer(customer);
+                            setViewMode('calendar');
+                          }}
+                          className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                        >
+                          View Calendar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      ) : (
+        /* Calendar View */
+        <div className="space-y-6">
+          {!selectedCustomer ? (
+            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Select a Customer</h2>
+              <p className="text-gray-500 mb-6">Choose a customer from the list below to view their monthly delivery calendar</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredCustomers.map((customer) => (
+                  <button
+                    key={customer.id}
+                    onClick={() => setSelectedCustomer(customer)}
+                    className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+                  >
+                    <div className="font-medium text-gray-900">{customer.name}</div>
+                    <div className="text-sm text-gray-500">{customer.daily_quantity}L • ₹{customer.rate_per_liter}/L</div>
+                    <div className="text-sm text-gray-500 capitalize">{customer.milk_type} milk</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <button
+                onClick={() => setSelectedCustomer(null)}
+                className="flex items-center text-blue-600 hover:text-blue-800 font-medium"
+              >
+                ← Back to Customer Selection
+              </button>
+              <MonthlyCalendarView customer={selectedCustomer} />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const MainLayout = () => {
   const { user, logout } = useAuth();
   const [currentView, setCurrentView] = useState('dashboard');
@@ -1182,7 +1726,8 @@ const MainLayout = () => {
     if (user?.role === 'admin') {
       return [
         { id: 'dashboard', name: 'Dashboard', icon: '📊' },
-        { id: 'customers', name: 'Customers', icon: '👥' },
+        { id: 'customers', name: 'Customer Management', icon: '👥' },
+        { id: 'calendar', name: 'Calendar View', icon: '📅' },
         { id: 'deliveries', name: 'Deliveries', icon: '🚛' },
         { id: 'payments', name: 'Payments', icon: '💳' }
       ];
@@ -1206,6 +1751,20 @@ const MainLayout = () => {
         // Only allow admin access to customer management
         if (user?.role === 'admin') {
           return <CustomerManagement />;
+        } else {
+          return (
+            <div className="p-6 text-center">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                <h2 className="text-xl font-semibold text-yellow-800 mb-2">Access Restricted</h2>
+                <p className="text-yellow-700">This feature is only available to administrators.</p>
+              </div>
+            </div>
+          );
+        }
+      case 'calendar':
+        // Professional Calendar View with Monthly Tracking
+        if (user?.role === 'admin') {
+          return <CustomerManagementWithCalendar />;
         } else {
           return (
             <div className="p-6 text-center">

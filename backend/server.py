@@ -826,11 +826,13 @@ async def delete_customer(customer_id: str, current_user: User = Depends(get_adm
 async def get_deliveries(
     customer_id: Optional[str] = None,
     date: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
     skip: int = 0,
     limit: int = 100,
     current_user: User = Depends(get_current_user)
 ):
-    """Get deliveries with role-based filtering"""
+    """Get deliveries with role-based filtering and date range support"""
     try:
         filter_query = {}
         
@@ -844,7 +846,18 @@ async def get_deliveries(
         elif customer_id:
             filter_query["customer_id"] = customer_id
         
-        if date:
+        # Handle date filtering - support both single date and date range
+        if start_date and end_date:
+            try:
+                start_datetime = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+                end_datetime = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+                filter_query["delivery_date"] = {
+                    "$gte": start_datetime,
+                    "$lte": end_datetime
+                }
+            except ValueError:
+                raise HTTPException(status_code=400, detail="Invalid date range format")
+        elif date:
             try:
                 target_date = datetime.fromisoformat(date).date()
                 filter_query["delivery_date"] = {
@@ -918,6 +931,50 @@ async def update_delivery_status(
     except Exception as e:
         logger.error(f"Update delivery status error: {e}")
         raise HTTPException(status_code=500, detail="Failed to update delivery status")
+
+class DeliveryUpdate(BaseModel):
+    quantity: Optional[float] = None
+    status: Optional[DeliveryStatus] = None
+
+@api_router.put("/deliveries/{delivery_id}")
+async def update_delivery(
+    delivery_id: str,
+    delivery_data: DeliveryUpdate,
+    current_user: User = Depends(get_admin_user)
+):
+    """Update delivery quantity and/or status"""
+    try:
+        update_data = {}
+        
+        if delivery_data.quantity is not None:
+            if delivery_data.quantity <= 0 or delivery_data.quantity > 50:
+                raise HTTPException(status_code=400, detail="Quantity must be between 0.1 and 50 liters")
+            update_data["quantity"] = delivery_data.quantity
+        
+        if delivery_data.status is not None:
+            update_data["status"] = delivery_data.status.value
+            if delivery_data.status == DeliveryStatus.DELIVERED:
+                update_data["delivered_at"] = datetime.utcnow()
+        
+        if not update_data:
+            raise HTTPException(status_code=400, detail="No valid fields to update")
+        
+        result = await db.deliveries.update_one(
+            {"id": delivery_id},
+            {"$set": update_data}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="Delivery not found")
+        
+        logger.info(f"Delivery updated: {delivery_id}")
+        
+        return {"message": "Delivery updated successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Update delivery error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update delivery")
 
 # Payment Routes
 @api_router.get("/payments")
