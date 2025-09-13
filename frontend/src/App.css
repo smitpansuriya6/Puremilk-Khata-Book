@@ -47,9 +47,25 @@ button, input, select, textarea {
 /* Focus styles for better accessibility */
 input:focus, select:focus, textarea:focus {
   outline: none;
-  ring: 2px;
-  ring-color: #3b82f6;
-  border-color: transparent;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Calendar specific styles */
+.calendar-cell {
+  transition: all 0.2s ease-in-out;
+}
+
+.calendar-cell:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-input {
+  transition: all 0.15s ease-in-out;
+}
+
+.calendar-input:focus {
+  transform: scale(1.02);
 }
 
 /* Loading animation */

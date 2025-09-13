@@ -3,6 +3,7 @@ import "./App.css";
 import axios from "axios";
 import config from "./config/config";
 import ErrorHandler from "./utils/errorHandler";
+import MonthlyMilkCalendar from "./components/MonthlyMilkCalendar";
 
 // Configure axios defaults
 axios.defaults.timeout = config.timeout || 10000;
@@ -1173,13 +1174,23 @@ const CustomerManagement = () => {
   );
 };
 
-// Monthly Calendar Component for Milk Delivery Tracking
+// Enhanced Monthly Calendar Component for Milk Delivery Tracking
 const MonthlyCalendarView = ({ customer }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [deliveries, setDeliveries] = useState({});
   const [loading, setLoading] = useState(false);
   const [editingDate, setEditingDate] = useState(null);
   const [editQuantity, setEditQuantity] = useState('');
+  const [dailyQuantities, setDailyQuantities] = useState({});
+  
+  // New state for morning/evening editing
+  const [editingMorning, setEditingMorning] = useState(null); // day number being edited for morning
+  const [editingEvening, setEditingEvening] = useState(null); // day number being edited for evening
+  const [editMorningQuantity, setEditMorningQuantity] = useState('');
+  const [editEveningQuantity, setEditEveningQuantity] = useState('');
+  
+  // Check if current user is admin (you can modify this logic based on your auth system)
+  const isAdmin = true; // For now, set to true. Replace with actual admin check logic
 
   // Get days in current month
   const getDaysInMonth = useCallback((date) => {
@@ -1227,6 +1238,12 @@ const MonthlyCalendarView = ({ customer }) => {
       
       setDeliveries(deliveryMap);
       console.log('Fetched deliveries:', deliveryMap);
+      
+      // Trigger population after deliveries are loaded
+      setTimeout(() => {
+        if (customer) populateDefaultQuantities();
+      }, 100);
+      
     } catch (error) {
       console.error('Error fetching deliveries:', error);
       alert('Error loading deliveries: ' + (error.response?.data?.detail || error.message));
@@ -1239,31 +1256,264 @@ const MonthlyCalendarView = ({ customer }) => {
     fetchMonthlyDeliveries();
   }, [fetchMonthlyDeliveries]);
 
-  // Handle quantity edit - only edit existing deliveries, no new additions
-  const handleQuantityEdit = async (day) => {
-    if (!customer || !editQuantity) return;
+  // Auto-populate when customer or month changes
+  useEffect(() => {
+    if (customer) {
+      populateDefaultQuantities();
+    } else {
+      setDailyQuantities({}); // Clear when no customer selected
+    }
+  }, [customer, currentDate]);
+
+  // Auto-populate calendar with customer's morning/evening deliveries from current date onwards
+  const populateDefaultQuantities = useCallback(() => {
+    if (!customer) return;
     
-    // Only allow editing if there's an existing delivery for this day
-    if (!deliveries[day]) {
-      alert('Cannot add new delivery. Only existing deliveries can be edited.');
-      setEditingDate(null);
-      setEditQuantity('');
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    // Get current date to determine from which day to populate
+    const today = new Date();
+    const currentDay = today.getDate();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    
+    const newQuantities = {};
+    
+    // Check if viewing current month or future month
+    const isCurrentMonth = (year === currentYear && month === currentMonth);
+    const isFutureMonth = (year > currentYear || (year === currentYear && month > currentMonth));
+    
+    // Only populate for current month (from today) or future months (full month)
+    if (isCurrentMonth) {
+      // For current month: populate from today onwards
+      for (let day = currentDay; day <= daysInMonth; day++) {
+        const morningKey = `${year}-${month}-${day}-morning`;
+        const eveningKey = `${year}-${month}-${day}-evening`;
+        
+        // Populate morning delivery if customer has morning delivery enabled
+        if (customer.morning_delivery && !deliveries[day]?.morning) {
+          newQuantities[morningKey] = {
+            quantity: customer.daily_quantity,
+            customer: customer,
+            date: `${year}-${month}-${day}`,
+            time: 'morning',
+            isDefault: true,
+            addedAt: new Date().toISOString()
+          };
+        }
+        
+        // Populate evening delivery if customer has evening delivery enabled
+        if (customer.evening_delivery && !deliveries[day]?.evening) {
+          newQuantities[eveningKey] = {
+            quantity: customer.daily_quantity,
+            customer: customer,
+            date: `${year}-${month}-${day}`,
+            time: 'evening',
+            isDefault: true,
+            addedAt: new Date().toISOString()
+          };
+        }
+      }
+    } else if (isFutureMonth) {
+      // For future months: populate entire month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const morningKey = `${year}-${month}-${day}-morning`;
+        const eveningKey = `${year}-${month}-${day}-evening`;
+        
+        // Populate morning delivery if customer has morning delivery enabled
+        if (customer.morning_delivery && !deliveries[day]?.morning) {
+          newQuantities[morningKey] = {
+            quantity: customer.daily_quantity,
+            customer: customer,
+            date: `${year}-${month}-${day}`,
+            time: 'morning',
+            isDefault: true,
+            addedAt: new Date().toISOString()
+          };
+        }
+        
+        // Populate evening delivery if customer has evening delivery enabled
+        if (customer.evening_delivery && !deliveries[day]?.evening) {
+          newQuantities[eveningKey] = {
+            quantity: customer.daily_quantity,
+            customer: customer,
+            date: `${year}-${month}-${day}`,
+            time: 'evening',
+            isDefault: true,
+            addedAt: new Date().toISOString()
+          };
+        }
+      }
+    }
+    // For past months: don't populate anything (newQuantities remains empty)
+    
+    setDailyQuantities(newQuantities);
+  }, [customer, currentDate, deliveries]);
+
+  // Generate date key for daily quantities
+  const getDateKey = (day) => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    return `${year}-${month}-${day}`;
+  };
+
+  // Handle click on morning delivery
+  const handleMorningClick = (day) => {
+    if (!customer || !day || !isAdmin) return;
+    
+    // Prevent editing in past months
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    const viewingYear = currentDate.getFullYear();
+    const viewingMonth = currentDate.getMonth();
+    
+    const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
+    if (isPastMonth) {
+      alert('Cannot edit deliveries in past months');
       return;
     }
     
-    try {
-      // Update existing delivery only
-      const response = await axios.put(`${API}/deliveries/${deliveries[day].id}`, {
-        quantity: parseFloat(editQuantity)
-      });
-      console.log('Update response:', response);
-      
-      setEditingDate(null);
-      setEditQuantity('');
-      await fetchMonthlyDeliveries();
-    } catch (error) {
-      console.error('Error updating delivery:', error);
-      alert('Error saving delivery: ' + (error.response?.data?.detail || error.message));
+    // For current month, prevent editing past dates
+    const isCurrentMonth = (viewingYear === currentYear && viewingMonth === currentMonth);
+    if (isCurrentMonth && day < today.getDate()) {
+      alert('Cannot edit past dates in current month');
+      return;
+    }
+    
+    setEditingMorning(day);
+    const morningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-morning`;
+    const existingMorning = deliveries[day]?.morning;
+    const morningQuantity = dailyQuantities[morningKey];
+    
+    if (existingMorning) {
+      setEditMorningQuantity(existingMorning.quantity.toString());
+    } else if (morningQuantity) {
+      setEditMorningQuantity(morningQuantity.quantity.toString());
+    } else {
+      setEditMorningQuantity(customer.daily_quantity.toString());
+    }
+  };
+
+  // Handle click on evening delivery
+  const handleEveningClick = (day) => {
+    if (!customer || !day || !isAdmin) return;
+    
+    // Prevent editing in past months
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    const viewingYear = currentDate.getFullYear();
+    const viewingMonth = currentDate.getMonth();
+    
+    const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
+    if (isPastMonth) {
+      alert('Cannot edit deliveries in past months');
+      return;
+    }
+    
+    // For current month, prevent editing past dates
+    const isCurrentMonth = (viewingYear === currentYear && viewingMonth === currentMonth);
+    if (isCurrentMonth && day < today.getDate()) {
+      alert('Cannot edit past dates in current month');
+      return;
+    }
+    
+    setEditingEvening(day);
+    const eveningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-evening`;
+    const existingEvening = deliveries[day]?.evening;
+    const eveningQuantity = dailyQuantities[eveningKey];
+    
+    if (existingEvening) {
+      setEditEveningQuantity(existingEvening.quantity.toString());
+    } else if (eveningQuantity) {
+      setEditEveningQuantity(eveningQuantity.quantity.toString());
+    } else {
+      setEditEveningQuantity(customer.daily_quantity.toString());
+    }
+  };
+
+  // Handle morning delivery save
+  const handleMorningSave = async (day) => {
+    if (!customer || !editMorningQuantity || !isAdmin) return;
+    
+    const numericValue = parseFloat(editMorningQuantity);
+    if (isNaN(numericValue) || numericValue <= 0) return;
+    
+    const morningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-morning`;
+    
+    // If there's an existing morning delivery, update it via API
+    if (deliveries[day]?.morning) {
+      try {
+        const response = await axios.put(`${API}/deliveries/${deliveries[day].morning.id}`, {
+          quantity: numericValue
+        });
+        console.log('Morning update response:', response);
+        setEditingMorning(null);
+        setEditMorningQuantity('');
+        await fetchMonthlyDeliveries();
+      } catch (error) {
+        console.error('Error updating morning delivery:', error);
+        alert('Error saving morning delivery: ' + (error.response?.data?.detail || error.message));
+      }
+    } else {
+      // Update local daily quantities for display
+      setDailyQuantities(prev => ({
+        ...prev,
+        [morningKey]: {
+          quantity: numericValue,
+          customer: customer,
+          date: `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`,
+          time: 'morning',
+          isDefault: false,
+          addedAt: new Date().toISOString()
+        }
+      }));
+      setEditingMorning(null);
+      setEditMorningQuantity('');
+    }
+  };
+
+  // Handle evening delivery save
+  const handleEveningSave = async (day) => {
+    if (!customer || !editEveningQuantity || !isAdmin) return;
+    
+    const numericValue = parseFloat(editEveningQuantity);
+    if (isNaN(numericValue) || numericValue <= 0) return;
+    
+    const eveningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-evening`;
+    
+    // If there's an existing evening delivery, update it via API
+    if (deliveries[day]?.evening) {
+      try {
+        const response = await axios.put(`${API}/deliveries/${deliveries[day].evening.id}`, {
+          quantity: numericValue
+        });
+        console.log('Evening update response:', response);
+        setEditingEvening(null);
+        setEditEveningQuantity('');
+        await fetchMonthlyDeliveries();
+      } catch (error) {
+        console.error('Error updating evening delivery:', error);
+        alert('Error saving evening delivery: ' + (error.response?.data?.detail || error.message));
+      }
+    } else {
+      // Update local daily quantities for display
+      setDailyQuantities(prev => ({
+        ...prev,
+        [eveningKey]: {
+          quantity: numericValue,
+          customer: customer,
+          date: `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`,
+          time: 'evening',
+          isDefault: false,
+          addedAt: new Date().toISOString()
+        }
+      }));
+      setEditingEvening(null);
+      setEditEveningQuantity('');
     }
   };
 
@@ -1319,37 +1569,58 @@ const MonthlyCalendarView = ({ customer }) => {
         </div>
       </div>
 
-      {/* Edit-only Mode Notice */}
-      <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-        <div className="flex items-center space-x-2">
-          <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-          </svg>
-          <p className="text-sm text-blue-800">
-            <span className="font-semibold">Edit-only Mode:</span> You can only edit existing deliveries. Click on days with milk deliveries to modify quantities.
-          </p>
+      {customer && (
+        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-center space-x-2">
+            <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            <p className="text-sm text-green-800">
+              <span className="font-semibold">Morning/Evening Calendar:</span> Shows separate morning 🌅 and evening 🌙 deliveries. {isAdmin ? 'Click quantities to edit (Admin only)' : 'Read-only view'}. Blue = auto-filled, Green = recorded.
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Customer Info */}
-      <div className="grid grid-cols-4 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
-        <div className="text-center">
-          <p className="text-sm text-gray-500">Daily Quantity</p>
-          <p className="font-semibold text-gray-900">{customer.daily_quantity}L</p>
+      {/* Customer Info - Only show when customer is selected */}
+      {customer && (
+        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+          <div className="grid grid-cols-4 gap-4 mb-4">
+            <div className="text-center">
+              <p className="text-sm text-gray-500">Daily Quantity</p>
+              <p className="font-semibold text-gray-900">{customer.daily_quantity}L</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-500">Rate per Liter</p>
+              <p className="font-semibold text-gray-900">₹{customer.rate_per_liter}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-500">Milk Type</p>
+              <p className="font-semibold text-gray-900 capitalize">{customer.milk_type}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-500">Monthly Target</p>
+              <p className="font-semibold text-gray-900">{(customer.daily_quantity * days.filter(d => d !== null).length).toFixed(1)}L</p>
+            </div>
+          </div>
+          
+          {/* Delivery Preferences */}
+          <div className="flex justify-center space-x-6 pt-4 border-t border-gray-200">
+            <div className="flex items-center space-x-2">
+              <span className="text-lg">🌅</span>
+              <span className={`text-sm font-medium ${customer.morning_delivery ? 'text-green-600' : 'text-gray-400'}`}>
+                Morning Delivery: {customer.morning_delivery ? 'Enabled' : 'Disabled'}
+              </span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="text-lg">🌙</span>
+              <span className={`text-sm font-medium ${customer.evening_delivery ? 'text-blue-600' : 'text-gray-400'}`}>
+                Evening Delivery: {customer.evening_delivery ? 'Enabled' : 'Disabled'}
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-500">Rate per Liter</p>
-          <p className="font-semibold text-gray-900">₹{customer.rate_per_liter}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-500">Milk Type</p>
-          <p className="font-semibold text-gray-900 capitalize">{customer.milk_type}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-500">Monthly Target</p>
-          <p className="font-semibold text-gray-900">{(customer.daily_quantity * days.filter(d => d !== null).length).toFixed(1)}L</p>
-        </div>
-      </div>
+      )}
 
       {/* Calendar */}
       <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -1376,86 +1647,225 @@ const MonthlyCalendarView = ({ customer }) => {
                   {/* Day number */}
                   <div className="flex justify-between items-start mb-2">
                     <span className="text-sm font-medium text-gray-900">{day}</span>
-                    <button
-                      onClick={() => {
-                        setEditingDate(day);
-                        setEditQuantity(deliveries[day]?.quantity?.toString() || customer.daily_quantity.toString());
-                      }}
-                      className="text-xs text-blue-600 hover:text-blue-800 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      Edit
-                    </button>
                   </div>
 
-                  {/* Delivery info */}
-                  {editingDate === day ? (
-                    <div className="flex-1">
-                      <input
-                        type="number"
-                        step="0.1"
-                        value={editQuantity}
-                        onChange={(e) => setEditQuantity(e.target.value)}
-                        className="w-full p-1 text-xs border border-gray-300 rounded"
-                        placeholder="Quantity"
-                        autoFocus
-                      />
-                      <div className="flex gap-1 mt-1">
-                        <button
-                          onClick={() => handleQuantityEdit(day)}
-                          className="flex-1 px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEditingDate(null);
-                            setEditQuantity('');
-                          }}
-                          className="flex-1 px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700"
-                        >
-                          Cancel
-                        </button>
+                  {/* Morning/Evening Delivery info */}
+                  <div className="flex-1 space-y-1">
+                    {/* Morning Delivery */}
+                    {customer && customer.morning_delivery && (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded p-1">
+                        <div className="text-xs font-semibold text-yellow-700 mb-1">🌅 Morning</div>
+                        {editingMorning === day ? (
+                          <div>
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={editMorningQuantity}
+                              onChange={(e) => setEditMorningQuantity(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleMorningSave(day);
+                                } else if (e.key === 'Escape') {
+                                  setEditingMorning(null);
+                                  setEditMorningQuantity('');
+                                }
+                              }}
+                              onBlur={() => handleMorningSave(day)}
+                              className="w-full p-1 text-xs border border-yellow-300 rounded"
+                              placeholder="Morning qty"
+                              autoFocus
+                            />
+                            <div className="flex gap-1 mt-1">
+                              <button
+                                onClick={() => handleMorningSave(day)}
+                                className="flex-1 px-1 py-0.5 text-xs bg-green-600 text-white rounded hover:bg-green-700"
+                              >
+                                Save
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setEditingMorning(null);
+                                  setEditMorningQuantity('');
+                                }}
+                                className="flex-1 px-1 py-0.5 text-xs bg-gray-600 text-white rounded hover:bg-gray-700"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div onClick={() => isAdmin && handleMorningClick(day)} className={isAdmin ? 'cursor-pointer hover:bg-yellow-100' : ''}>
+                            {(() => {
+                              const morningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-morning`;
+                              const morningQuantity = dailyQuantities[morningKey];
+                              const morningDelivery = deliveries[day]?.morning;
+                              
+                              // Check if this is a past month or past date in current month
+                              const today = new Date();
+                              const currentMonth = today.getMonth();
+                              const currentYear = today.getFullYear();
+                              const viewingYear = currentDate.getFullYear();
+                              const viewingMonth = currentDate.getMonth();
+                              
+                              const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
+                              const isPastDate = (viewingYear === currentYear && viewingMonth === currentMonth && day < today.getDate());
+                              const canEdit = isAdmin && !isPastMonth && !isPastDate;
+                              
+                              if (morningDelivery) {
+                                return (
+                                  <div>
+                                    <div className="text-xs font-semibold text-green-600">
+                                      {morningDelivery.quantity}L {canEdit && <span className="text-gray-400">✎</span>}
+                                    </div>
+                                    <div className={`text-xs px-1 py-0.5 rounded text-center ${
+                                      morningDelivery.status === 'delivered' 
+                                        ? 'bg-green-100 text-green-800' 
+                                        : 'bg-yellow-100 text-yellow-800'
+                                    }`}>
+                                      {morningDelivery.status}
+                                    </div>
+                                  </div>
+                                );
+                              } else if (morningQuantity) {
+                                return (
+                                  <div>
+                                    <div className="text-xs font-semibold text-blue-500">
+                                      {morningQuantity.quantity}L {canEdit && <span className="text-gray-400">✎</span>}
+                                    </div>
+                                    <div className="text-xs text-gray-500">Auto-filled</div>
+                                  </div>
+                                );
+                              } else {
+                                return (
+                                  <div className="text-xs text-gray-400">
+                                    No delivery {canEdit && <span className="text-blue-500">+ Add</span>}
+                                  </div>
+                                );
+                              }
+                            })()}
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  ) : (
-                    <div className="flex-1 group cursor-pointer" onClick={() => {
-                      // Only allow editing if there's an existing delivery
-                      if (deliveries[day]) {
-                        setEditingDate(day);
-                        setEditQuantity(deliveries[day]?.quantity?.toString() || customer.daily_quantity.toString());
-                      }
-                    }}>
-                      {deliveries[day] ? (
-                        <div>
-                          <div className="text-xs font-semibold text-green-600 mb-1">
-                            {deliveries[day].quantity}L
+                    )}
+                    
+                    {/* Evening Delivery */}
+                    {customer && customer.evening_delivery && (
+                      <div className="bg-blue-50 border border-blue-200 rounded p-1">
+                        <div className="text-xs font-semibold text-blue-700 mb-1">🌙 Evening</div>
+                        {editingEvening === day ? (
+                          <div>
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={editEveningQuantity}
+                              onChange={(e) => setEditEveningQuantity(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleEveningSave(day);
+                                } else if (e.key === 'Escape') {
+                                  setEditingEvening(null);
+                                  setEditEveningQuantity('');
+                                }
+                              }}
+                              onBlur={() => handleEveningSave(day)}
+                              className="w-full p-1 text-xs border border-blue-300 rounded"
+                              placeholder="Evening qty"
+                              autoFocus
+                            />
+                            <div className="flex gap-1 mt-1">
+                              <button
+                                onClick={() => handleEveningSave(day)}
+                                className="flex-1 px-1 py-0.5 text-xs bg-green-600 text-white rounded hover:bg-green-700"
+                              >
+                                Save
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setEditingEvening(null);
+                                  setEditEveningQuantity('');
+                                }}
+                                className="flex-1 px-1 py-0.5 text-xs bg-gray-600 text-white rounded hover:bg-gray-700"
+                              >
+                                Cancel
+                              </button>
+                            </div>
                           </div>
-                          <div className={`text-xs px-2 py-1 rounded-full text-center ${
-                            deliveries[day].status === 'delivered' 
-                              ? 'bg-green-100 text-green-800' 
-                              : deliveries[day].status === 'pending'
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : 'bg-red-100 text-red-800'
-                          }`}>
-                            {deliveries[day].status}
+                        ) : (
+                          <div onClick={() => isAdmin && handleEveningClick(day)} className={isAdmin ? 'cursor-pointer hover:bg-blue-100' : ''}>
+                            {(() => {
+                              const eveningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-evening`;
+                              const eveningQuantity = dailyQuantities[eveningKey];
+                              const eveningDelivery = deliveries[day]?.evening;
+                              
+                              // Check if this is a past month or past date in current month
+                              const today = new Date();
+                              const currentMonth = today.getMonth();
+                              const currentYear = today.getFullYear();
+                              const viewingYear = currentDate.getFullYear();
+                              const viewingMonth = currentDate.getMonth();
+                              
+                              const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
+                              const isPastDate = (viewingYear === currentYear && viewingMonth === currentMonth && day < today.getDate());
+                              const canEdit = isAdmin && !isPastMonth && !isPastDate;
+                              
+                              if (eveningDelivery) {
+                                return (
+                                  <div>
+                                    <div className="text-xs font-semibold text-green-600">
+                                      {eveningDelivery.quantity}L {canEdit && <span className="text-gray-400">✎</span>}
+                                    </div>
+                                    <div className={`text-xs px-1 py-0.5 rounded text-center ${
+                                      eveningDelivery.status === 'delivered' 
+                                        ? 'bg-green-100 text-green-800' 
+                                        : 'bg-yellow-100 text-yellow-800'
+                                    }`}>
+                                      {eveningDelivery.status}
+                                    </div>
+                                  </div>
+                                );
+                              } else if (eveningQuantity) {
+                                return (
+                                  <div>
+                                    <div className="text-xs font-semibold text-blue-500">
+                                      {eveningQuantity.quantity}L {canEdit && <span className="text-gray-400">✎</span>}
+                                    </div>
+                                    <div className="text-xs text-gray-500">Auto-filled</div>
+                                  </div>
+                                );
+                              } else {
+                                return (
+                                  <div className="text-xs text-gray-400">
+                                    No delivery {canEdit && <span className="text-blue-500">+ Add</span>}
+                                  </div>
+                                );
+                              }
+                            })()}
                           </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            ₹{(deliveries[day].quantity * customer.rate_per_liter).toFixed(2)}
-                          </div>
-                          <div className="text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                            Click to edit
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-center">
-                          <div className="text-xs text-gray-400 mb-1">No delivery</div>
-                          <div className="text-xs text-gray-300">
-                            Edit only mode
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Daily Total */}
+                    {customer && (
+                      <div className="text-xs text-gray-600 text-center mt-1 pt-1 border-t border-gray-200">
+                        Total: {(() => {
+                          const morningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-morning`;
+                          const eveningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-evening`;
+                          const morningQ = dailyQuantities[morningKey]?.quantity || deliveries[day]?.morning?.quantity || 0;
+                          const eveningQ = dailyQuantities[eveningKey]?.quantity || deliveries[day]?.evening?.quantity || 0;
+                          const total = morningQ + eveningQ;
+                          return total > 0 ? `${total}L` : '0L';
+                        })()}
+                      </div>
+                    )}
+                    
+                    {/* Click to edit hint */}
+                    {customer && (
+                      <div className="text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity text-center mt-1">
+                        Click to edit
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -1484,10 +1894,20 @@ const MonthlyCalendarView = ({ customer }) => {
         <div className="text-center">
           <p className="text-sm text-blue-600">Monthly Revenue</p>
           <p className="font-bold text-blue-900">
-            ₹{Object.values(deliveries)
-              .filter(d => d.status === 'delivered')
-              .reduce((sum, d) => sum + (d.quantity * customer.rate_per_liter), 0)
-              .toFixed(2)}
+            ₹{(() => {
+              const deliveredRevenue = Object.values(deliveries)
+                .filter(d => d.status === 'delivered')
+                .reduce((sum, d) => sum + (d.quantity * customer.rate_per_liter), 0);
+              
+              const plannedRevenue = Object.entries(dailyQuantities)
+                .filter(([key]) => {
+                  const [year, month] = key.split('-').map(Number);
+                  return year === currentDate.getFullYear() && month === currentDate.getMonth();
+                })
+                .reduce((sum, [, data]) => sum + (data.quantity * customer.rate_per_liter), 0);
+              
+              return (deliveredRevenue + plannedRevenue).toFixed(2);
+            })()}
           </p>
         </div>
         <div className="text-center">
@@ -1713,6 +2133,63 @@ const CustomerManagementWithCalendar = () => {
           )}
         </div>
       )}
+    </div>
+  );
+};
+
+// Milk Calendar with Customer Data
+const MilkCalendarWithCustomers = () => {
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API}/customers`);
+      setCustomers(response.data);
+      setError('');
+    } catch (error) {
+      const errorMessage = ErrorHandler.handleApiError(error, 'Fetch Customers');
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="p-6 text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <p className="mt-2 text-gray-600">Loading customers...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-red-800 mb-2">Error Loading Customers</h3>
+          <p className="text-red-700 mb-4">{error}</p>
+          <button
+            onClick={fetchCustomers}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6">
+      <MonthlyMilkCalendar customers={customers} />
     </div>
   );
 };
