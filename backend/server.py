@@ -228,6 +228,21 @@ class CustomerCreate(BaseModel):
     rate_per_liter: float = Field(..., gt=0, le=1000)
     morning_delivery: bool = True
     evening_delivery: bool = False
+    password: str = Field(..., min_length=8, max_length=128)
+    confirm_password: str = Field(..., min_length=8, max_length=128)
+    
+    @field_validator('password')
+    def validate_password(cls, v):
+        if not re.search(r'[A-Za-z]', v):
+            raise ValueError('Password must contain at least one letter')
+        if not re.search(r'\d', v):
+            raise ValueError('Password must contain at least one number')
+        return v
+    
+    def model_validate(self, values):
+        if values.get('password') != values.get('confirm_password'):
+            raise ValueError('Passwords do not match')
+        return values
 
 class CustomerUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=2, max_length=100)
@@ -399,15 +414,25 @@ async def internal_server_error_handler(request: Request, exc: Exception):
     )
 
 # Authentication Routes
+@api_router.get("/auth/check-admin")
+async def check_admin_exists():
+    """Check if admin user already exists"""
+    try:
+        admin_count = await db.users.count_documents({"role": UserRole.ADMIN.value})
+        return {"admin_exists": admin_count > 0}
+    except Exception as e:
+        logger.error(f"Error checking admin existence: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 @api_router.post("/auth/register")
 async def register_user(user_data: UserCreate):
-    """Register a new user with enhanced validation"""
+    """Register a new user - Only first user can be admin"""
     try:
-        # Check customer limit for admin users
+        # Check if any admin already exists - Only first user can be admin
         if user_data.role == UserRole.ADMIN:
             admin_count = await db.users.count_documents({"role": UserRole.ADMIN.value})
-            if admin_count >= 10:  # Max 10 admins
-                raise HTTPException(status_code=400, detail="Maximum admin users limit reached")
+            if admin_count > 0:
+                raise HTTPException(status_code=403, detail="Admin already exists. Only the first user can register as admin.")
         
         # Check if user already exists
         existing_user = await db.users.find_one({"email": user_data.email})
@@ -721,8 +746,12 @@ async def get_customers(
 
 @api_router.post("/customers", response_model=Customer)
 async def create_customer(customer_data: CustomerCreate, current_user: User = Depends(get_admin_user)):
-    """Create a new customer with validation"""
+    """Create a new customer with login credentials"""
     try:
+        # Validate password confirmation
+        if customer_data.password != customer_data.confirm_password:
+            raise HTTPException(status_code=400, detail="Passwords do not match")
+        
         # Check customer limit
         customer_count = await db.customers.count_documents({})
         if customer_count >= settings.MAX_CUSTOMER_LIMIT:
@@ -733,10 +762,32 @@ async def create_customer(customer_data: CustomerCreate, current_user: User = De
         if existing_customer:
             raise HTTPException(status_code=400, detail="Customer with this email already exists")
         
-        customer = Customer(**customer_data.dict(), created_by=current_user.id)
-        await db.customers.insert_one(customer.dict())
+        # Check if user email already exists
+        existing_user = await db.users.find_one({"email": customer_data.email})
+        if existing_user:
+            raise HTTPException(status_code=400, detail="User with this email already exists")
         
-        logger.info(f"New customer created: {customer.email} by admin: {current_user.email}")
+        # Create customer record
+        customer_dict = customer_data.dict()
+        customer_dict.pop('password')  # Remove password from customer data
+        customer_dict.pop('confirm_password')  # Remove confirm_password from customer data
+        customer = Customer(**customer_dict, created_by=current_user.id)
+        
+        # Create user credentials for customer
+        hashed_password = hash_password(customer_data.password)
+        user = User(
+            email=customer_data.email,
+            password=hashed_password,
+            role=UserRole.CUSTOMER,
+            name=customer_data.name,
+            phone=customer_data.phone
+        )
+        
+        # Insert both customer and user
+        await db.customers.insert_one(customer.dict())
+        await db.users.insert_one(user.dict())
+        
+        logger.info(f"New customer and user created: {customer.email} by admin: {current_user.email}")
         
         return customer
     except HTTPException:
@@ -1021,6 +1072,81 @@ async def health_check():
     except Exception as e:
         logger.error(f"Health check failed: {e}")
         raise HTTPException(status_code=503, detail="Service unavailable")
+
+# Customer-specific routes (for customer dashboard)
+@api_router.get("/customer/profile", response_model=Customer)
+async def get_customer_profile(current_user: User = Depends(get_current_user)):
+    """Get customer's own profile"""
+    try:
+        if current_user.role != UserRole.CUSTOMER:
+            raise HTTPException(status_code=403, detail="Customer access only")
+        
+        customer_doc = await db.customers.find_one({"email": current_user.email})
+        if not customer_doc:
+            raise HTTPException(status_code=404, detail="Customer profile not found")
+        
+        return Customer(**customer_doc)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get customer profile error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch profile")
+
+@api_router.get("/customer/deliveries")
+async def get_customer_deliveries(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: User = Depends(get_current_user)
+):
+    """Get customer's own deliveries"""
+    try:
+        if current_user.role != UserRole.CUSTOMER:
+            raise HTTPException(status_code=403, detail="Customer access only")
+        
+        customer_doc = await db.customers.find_one({"email": current_user.email})
+        if not customer_doc:
+            raise HTTPException(status_code=404, detail="Customer profile not found")
+        
+        deliveries_cursor = db.deliveries.find(
+            {"customer_id": customer_doc["id"]}
+        ).sort("delivery_date", -1).skip(skip).limit(limit)
+        
+        deliveries = await deliveries_cursor.to_list(length=None)
+        
+        return {"deliveries": deliveries, "count": len(deliveries)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get customer deliveries error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch deliveries")
+
+@api_router.get("/customer/payments")
+async def get_customer_payments(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: User = Depends(get_current_user)
+):
+    """Get customer's own payments"""
+    try:
+        if current_user.role != UserRole.CUSTOMER:
+            raise HTTPException(status_code=403, detail="Customer access only")
+        
+        customer_doc = await db.customers.find_one({"email": current_user.email})
+        if not customer_doc:
+            raise HTTPException(status_code=404, detail="Customer profile not found")
+        
+        payments_cursor = db.payments.find(
+            {"customer_id": customer_doc["id"]}
+        ).sort("payment_date", -1).skip(skip).limit(limit)
+        
+        payments = await payments_cursor.to_list(length=None)
+        
+        return {"payments": payments, "count": len(payments)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get customer payments error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch payments")
 
 # Include the router in the main app
 app.include_router(api_router)

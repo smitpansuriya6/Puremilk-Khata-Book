@@ -533,7 +533,30 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { user } = useAuth();
+  
+  // Get user info from localStorage since we're not using useAuth anymore
+  const getUserFromStorage = () => {
+    try {
+      const userData = localStorage.getItem('user');
+      return userData ? JSON.parse(userData) : null;
+    } catch {
+      return null;
+    }
+  };
+  
+  const user = getUserFromStorage();
+  
+  // Check if current user is admin
+  const isAdmin = () => {
+    const userData = localStorage.getItem('user');
+    if (!userData) return false;
+    try {
+      const user = JSON.parse(userData);
+      return user.role === 'admin';
+    } catch {
+      return false;
+    }
+  };
 
   const fetchStats = useCallback(async () => {
     try {
@@ -551,8 +574,6 @@ const Dashboard = () => {
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);
-
-  const isAdmin = user?.role === 'admin';
 
   if (loading) {
     return (
@@ -572,10 +593,10 @@ const Dashboard = () => {
     <div className="p-6">
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-2">
-          {isAdmin ? 'Admin Dashboard' : 'My Dashboard'}
+          {isAdmin() ? 'Admin Dashboard' : 'My Dashboard'}
         </h2>
         <p className="text-gray-600">
-          {isAdmin ? 'Overview of your dairy business' : 'Overview of your milk delivery service'}
+          {isAdmin() ? 'Overview of your dairy business' : 'Overview of your milk delivery service'}
         </p>
       </div>
 
@@ -587,7 +608,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  {isAdmin ? 'Total Customers' : 'My Account'}
+                  {isAdmin() ? 'Total Customers' : 'My Account'}
                 </p>
                 <p className="text-3xl font-bold text-blue-600">{stats.total_customers}</p>
               </div>
@@ -601,7 +622,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  {isAdmin ? 'Active Customers' : 'Account Status'}
+                  {isAdmin() ? 'Active Customers' : 'Account Status'}
                 </p>
                 <p className="text-3xl font-bold text-green-600">{stats.active_customers}</p>
               </div>
@@ -639,7 +660,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  {isAdmin ? "Today's Revenue" : "Today's Payments"}
+                  {isAdmin() ? "Today's Revenue" : "Today's Payments"}
                 </p>
                 <p className="text-3xl font-bold text-purple-600">₹{stats.today_revenue?.toFixed(2) || '0.00'}</p>
               </div>
@@ -653,7 +674,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  {isAdmin ? "Monthly Revenue" : "Monthly Payments"}
+                  {isAdmin() ? "Monthly Revenue" : "Monthly Payments"}
                 </p>
                 <p className="text-3xl font-bold text-indigo-600">₹{stats.monthly_revenue?.toFixed(2) || '0.00'}</p>
               </div>
@@ -711,7 +732,9 @@ const CustomerManagement = () => {
     daily_quantity: 1.0,
     rate_per_liter: 50.0,
     morning_delivery: true,
-    evening_delivery: false
+    evening_delivery: false,
+    password: '',
+    confirm_password: ''
   });
 
   const resetForm = useCallback(() => {
@@ -724,7 +747,9 @@ const CustomerManagement = () => {
       daily_quantity: 1.0,
       rate_per_liter: 50.0,
       morning_delivery: true,
-      evening_delivery: false
+      evening_delivery: false,
+      password: '',
+      confirm_password: ''
     });
     setValidationErrors({});
     setEditingCustomer(null);
@@ -767,6 +792,20 @@ const CustomerManagement = () => {
     }
     if (!ValidationUtils.rate(formData.rate_per_liter)) {
       errors.rate_per_liter = 'Rate must be between 0 and ₹1000 per liter';
+    }
+    if (!editingCustomer) {  // Only validate passwords for new customers
+      if (!formData.password || formData.password.length < 8) {
+        errors.password = 'Password must be at least 8 characters';
+      }
+      if (!/[A-Za-z]/.test(formData.password)) {
+        errors.password = 'Password must contain at least one letter';
+      }
+      if (!/\d/.test(formData.password)) {
+        errors.password = 'Password must contain at least one number';
+      }
+      if (formData.password !== formData.confirm_password) {
+        errors.confirm_password = 'Passwords do not match';
+      }
     }
 
     return errors;
@@ -1041,6 +1080,53 @@ const CustomerManagement = () => {
                 )}
               </div>
               
+              {/* Login Credentials - Only show for new customers */}
+              {!editingCustomer && (
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Customer Login Credentials</h3>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Password *</label>
+                      <input
+                        type="password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                          validationErrors.password ? 'border-red-300' : 'border-gray-300'
+                        }`}
+                        placeholder="Enter password (min 8 chars)"
+                        required
+                        disabled={formLoading}
+                      />
+                      {validationErrors.password && (
+                        <p className="text-red-500 text-sm mt-1">{validationErrors.password}</p>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password *</label>
+                      <input
+                        type="password"
+                        value={formData.confirm_password}
+                        onChange={(e) => setFormData({...formData, confirm_password: e.target.value})}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                          validationErrors.confirm_password ? 'border-red-300' : 'border-gray-300'
+                        }`}
+                        placeholder="Confirm password"
+                        required
+                        disabled={formLoading}
+                      />
+                      {validationErrors.confirm_password && (
+                        <p className="text-red-500 text-sm mt-1">{validationErrors.confirm_password}</p>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">
+                    These credentials will allow the customer to log in and view their dashboard.
+                  </p>
+                </div>
+              )}
+              
               <div className="grid grid-cols-2 gap-6">
                 <div className="flex items-center">
                   <input
@@ -1189,8 +1275,17 @@ const MonthlyCalendarView = ({ customer }) => {
   const [editMorningQuantity, setEditMorningQuantity] = useState('');
   const [editEveningQuantity, setEditEveningQuantity] = useState('');
   
-  // Check if current user is admin (you can modify this logic based on your auth system)
-  const isAdmin = true; // For now, set to true. Replace with actual admin check logic
+  // Check if current user is admin
+  const isAdmin = () => {
+    const userData = localStorage.getItem('user');
+    if (!userData) return false;
+    try {
+      const user = JSON.parse(userData);
+      return user.role === 'admin';
+    } catch {
+      return false;
+    }
+  };
 
   // Get days in current month
   const getDaysInMonth = useCallback((date) => {
@@ -1361,7 +1456,7 @@ const MonthlyCalendarView = ({ customer }) => {
 
   // Handle click on morning delivery
   const handleMorningClick = (day) => {
-    if (!customer || !day || !isAdmin) return;
+    if (!customer || !day || !isAdmin()) return;
     
     // Prevent editing in past months
     const today = new Date();
@@ -1399,7 +1494,7 @@ const MonthlyCalendarView = ({ customer }) => {
 
   // Handle click on evening delivery
   const handleEveningClick = (day) => {
-    if (!customer || !day || !isAdmin) return;
+    if (!customer || !day || !isAdmin()) return;
     
     // Prevent editing in past months
     const today = new Date();
@@ -1437,7 +1532,7 @@ const MonthlyCalendarView = ({ customer }) => {
 
   // Handle morning delivery save
   const handleMorningSave = async (day) => {
-    if (!customer || !editMorningQuantity || !isAdmin) return;
+    if (!customer || !editMorningQuantity || !isAdmin()) return;
     
     const numericValue = parseFloat(editMorningQuantity);
     if (isNaN(numericValue) || numericValue <= 0) return;
@@ -1478,7 +1573,7 @@ const MonthlyCalendarView = ({ customer }) => {
 
   // Handle evening delivery save
   const handleEveningSave = async (day) => {
-    if (!customer || !editEveningQuantity || !isAdmin) return;
+    if (!customer || !editEveningQuantity || !isAdmin()) return;
     
     const numericValue = parseFloat(editEveningQuantity);
     if (isNaN(numericValue) || numericValue <= 0) return;
@@ -1576,7 +1671,7 @@ const MonthlyCalendarView = ({ customer }) => {
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
             <p className="text-sm text-green-800">
-              <span className="font-semibold">Morning/Evening Calendar:</span> Shows separate morning 🌅 and evening 🌙 deliveries. {isAdmin ? 'Click quantities to edit (Admin only)' : 'Read-only view'}. Blue = auto-filled, Green = recorded.
+              <span className="font-semibold">Morning/Evening Calendar:</span> Shows separate morning 🌅 and evening 🌙 deliveries. {isAdmin() ? 'Click quantities to edit (Admin only)' : 'Read-only view'}. Blue = auto-filled, Green = recorded.
             </p>
           </div>
         </div>
@@ -1694,7 +1789,7 @@ const MonthlyCalendarView = ({ customer }) => {
                             </div>
                           </div>
                         ) : (
-                          <div onClick={() => isAdmin && handleMorningClick(day)} className={isAdmin ? 'cursor-pointer hover:bg-yellow-100' : ''}>
+                          <div onClick={() => isAdmin() && handleMorningClick(day)} className={isAdmin() ? 'cursor-pointer hover:bg-yellow-100' : ''}>
                             {(() => {
                               const morningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-morning`;
                               const morningQuantity = dailyQuantities[morningKey];
@@ -1709,13 +1804,13 @@ const MonthlyCalendarView = ({ customer }) => {
                               
                               const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
                               const isPastDate = (viewingYear === currentYear && viewingMonth === currentMonth && day < today.getDate());
-                              const canEdit = isAdmin && !isPastMonth && !isPastDate;
+                              const canEdit = isAdmin() && !isPastMonth && !isPastDate;
                               
                               if (morningDelivery) {
                                 return (
                                   <div>
                                     <div className="text-xs font-semibold text-green-600">
-                                      {morningDelivery.quantity}L {canEdit && <span className="text-gray-400">✎</span>}
+                                      {morningDelivery.quantity}L {(isAdmin() && !isPastMonth && !isPastDate) && <span className="text-gray-400">✎</span>}
                                     </div>
                                     <div className={`text-xs px-1 py-0.5 rounded text-center ${
                                       morningDelivery.status === 'delivered' 
@@ -1791,7 +1886,7 @@ const MonthlyCalendarView = ({ customer }) => {
                             </div>
                           </div>
                         ) : (
-                          <div onClick={() => isAdmin && handleEveningClick(day)} className={isAdmin ? 'cursor-pointer hover:bg-blue-100' : ''}>
+                          <div onClick={() => isAdmin() && handleEveningClick(day)} className={isAdmin() ? 'cursor-pointer hover:bg-blue-100' : ''}>
                             {(() => {
                               const eveningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-evening`;
                               const eveningQuantity = dailyQuantities[eveningKey];
@@ -1806,7 +1901,7 @@ const MonthlyCalendarView = ({ customer }) => {
                               
                               const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
                               const isPastDate = (viewingYear === currentYear && viewingMonth === currentMonth && day < today.getDate());
-                              const canEdit = isAdmin && !isPastMonth && !isPastDate;
+                              const canEdit = isAdmin() && !isPastMonth && !isPastDate;
                               
                               if (eveningDelivery) {
                                 return (
@@ -2194,8 +2289,8 @@ const MilkCalendarWithCustomers = () => {
   );
 };
 
-const MainLayout = () => {
-  const { user, logout } = useAuth();
+const MainLayout = ({ user, onLogout }) => {
+  // const { user, logout } = useAuth();
   const [currentView, setCurrentView] = useState('dashboard');
 
   // Role-based navigation
@@ -2293,7 +2388,7 @@ const MainLayout = () => {
             <div className="flex items-center space-x-4">
               <span className="text-gray-700">Hello, {user?.name}</span>
               <button
-                onClick={logout}
+                onClick={onLogout}
                 className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200"
               >
                 Logout
@@ -2329,26 +2424,29 @@ const MainLayout = () => {
   );
 };
 
-function App() {
-  const { user, loading } = useAuth();
+function App({ user, onLogout }) {
+  // const { user, loading } = useAuth();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-center">
-          <LoadingSpinner size="large" />
-          <p className="text-gray-600 mt-4">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+  //       <div className="text-center">
+  //         <LoadingSpinner size="large" />
+  //         <p className="text-gray-600 mt-4">Loading...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="App">
-      {user ? <MainLayout /> : <LoginForm />}
+      <MainLayout user={user} onLogout={onLogout} />
     </div>
   );
 }
+
+// Export App component directly for use with external auth
+export { App };
 
 export default function AppWithAuth() {
   return (
