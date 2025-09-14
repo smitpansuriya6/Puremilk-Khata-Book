@@ -873,14 +873,25 @@ const CustomerManagement = () => {
   };
 
   const handleDelete = async (customerId, customerName) => {
+    // Add validation
+    if (!customerId) {
+      setError('Invalid customer ID');
+      return;
+    }
+
     if (window.confirm(`Are you sure you want to delete ${customerName}? This action cannot be undone.`)) {
       try {
         setError('');
-        await apiCall(`/customers/${customerId}`, { method: 'DELETE' });
+        console.log(`Deleting customer: ${customerId}`); // Debug log
+        
+        const response = await apiCall(`/customers/${customerId}`, { method: 'DELETE' });
+        console.log('Delete response:', response.data); // Debug log
+        
         setSuccess('Customer deleted successfully');
-        fetchCustomers();
+        fetchCustomers(); // Refresh the customer list
         setTimeout(() => setSuccess(''), 3000);
       } catch (error) {
+        console.error('Delete error:', error); // Debug log
         const errorMessage = ErrorHandler.handleApiError(error, 'Delete Customer');
         setError(errorMessage);
       }

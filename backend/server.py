@@ -424,6 +424,28 @@ async def check_admin_exists():
         logger.error(f"Error checking admin existence: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+@api_router.get("/auth/debug-email/{email}")
+async def debug_email_status(email: str, current_user: User = Depends(get_admin_user)):
+    """Debug endpoint to check email status in database"""
+    try:
+        customer_active = await db.customers.find_one({"email": email, "is_active": True})
+        customer_inactive = await db.customers.find_one({"email": email, "is_active": False})
+        user_active = await db.users.find_one({"email": email, "is_active": True})
+        user_inactive = await db.users.find_one({"email": email, "is_active": False})
+        
+        return {
+            "email": email,
+            "customer_active": bool(customer_active),
+            "customer_inactive": bool(customer_inactive),
+            "user_active": bool(user_active),
+            "user_inactive": bool(user_inactive),
+            "customer_active_id": customer_active.get("id") if customer_active else None,
+            "user_active_id": user_active.get("id") if user_active else None
+        }
+    except Exception as e:
+        logger.error(f"Error debugging email status: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 @api_router.post("/auth/register")
 async def register_user(user_data: UserCreate):
     """Register a new user - Only first user can be admin"""
@@ -628,7 +650,7 @@ async def get_dashboard_stats(current_user: User = Depends(get_current_user)):
             customer_id = customer_doc["id"] if customer_doc else None
             
             total_customers = 1 if customer_doc else 0
-            active_customers = 1 if customer_doc and customer_doc.get("is_active", True) else 0
+            active_customers = 1 if customer_doc else 0
             
             if customer_id:
                 today_deliveries = await db.deliveries.count_documents({
@@ -757,7 +779,7 @@ async def create_customer(customer_data: CustomerCreate, current_user: User = De
         if customer_count >= settings.MAX_CUSTOMER_LIMIT:
             raise HTTPException(status_code=400, detail="Maximum customer limit reached")
         
-        # Check if customer email already exists
+        # Check if customer email already exists (simple check since we use permanent deletes)
         existing_customer = await db.customers.find_one({"email": customer_data.email})
         if existing_customer:
             raise HTTPException(status_code=400, detail="Customer with this email already exists")
@@ -854,18 +876,33 @@ async def update_customer(
 
 @api_router.delete("/customers/{customer_id}")
 async def delete_customer(customer_id: str, current_user: User = Depends(get_admin_user)):
-    """Soft delete a customer"""
+    """Permanently delete a customer and their user account"""
     try:
-        result = await db.customers.update_one(
-            {"id": customer_id},
-            {"$set": {"is_active": False, "updated_at": datetime.utcnow()}}
-        )
-        if result.modified_count == 0:
+        # First get the customer to find their email
+        customer = await db.customers.find_one({"id": customer_id})
+        if not customer:
             raise HTTPException(status_code=404, detail="Customer not found")
         
-        logger.info(f"Customer soft deleted: {customer_id} by admin: {current_user.email}")
+        customer_email = customer["email"]
         
-        return {"message": "Customer deactivated successfully"}
+        # Permanently delete the customer record
+        result = await db.customers.delete_one({"id": customer_id})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Customer not found")
+        
+        # Also permanently delete the associated user account
+        user_result = await db.users.delete_one({"email": customer_email})
+        
+        # Also delete any related delivery records for this customer
+        delivery_result = await db.deliveries.delete_many({"customer_id": customer_id})
+        
+        # Also delete any related payment records for this customer
+        payment_result = await db.payments.delete_many({"customer_id": customer_id})
+        
+        logger.info(f"Customer permanently deleted: {customer_id} ({customer_email}) by admin: {current_user.email}")
+        logger.info(f"Associated records deleted - User: {user_result.deleted_count}, Deliveries: {delivery_result.deleted_count}, Payments: {payment_result.deleted_count}")
+        
+        return {"message": "Customer permanently deleted successfully"}
     except HTTPException:
         raise
     except Exception as e:
