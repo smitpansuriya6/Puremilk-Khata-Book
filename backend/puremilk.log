@@ -19719,3 +19719,793 @@
 2025-09-14 14:32:53,778 - watchfiles.main - INFO - 1 change detected
 2025-09-14 14:32:54,179 - watchfiles.main - INFO - 1 change detected
 2025-09-14 14:32:54,582 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:37,228 - watchfiles.main - INFO - 4 changes detected
+2025-09-16 09:44:38,738 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:38,989 - server - INFO - Database indexes created successfully
+2025-09-16 09:44:38,990 - server - INFO - Database connected and indexes created successfully
+2025-09-16 09:44:39,093 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:39,457 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:39,878 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:40,231 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:40,646 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:41,053 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:41,462 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:41,870 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:42,275 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:42,635 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:43,050 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:43,467 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:43,821 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:44,234 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:44,642 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:45,052 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:45,415 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:45,824 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:46,233 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:46,642 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:47,056 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:47,417 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:47,834 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:48,244 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:48,602 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:49,016 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:49,380 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:49,796 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:50,206 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:50,619 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:51,033 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:51,445 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:51,807 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:52,210 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:52,622 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:53,032 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:53,441 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:53,849 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:54,211 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:54,629 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:55,040 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:55,453 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:55,814 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:56,258 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:56,669 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:57,027 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:57,442 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:57,895 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:44:58,510 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:00,450 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:01,616 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:02,827 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:05,915 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:07,199 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:08,464 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:09,986 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:11,343 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:12,866 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:13,669 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:14,476 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:15,887 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:16,854 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:18,066 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:19,082 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:20,339 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:21,245 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:23,117 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:23,772 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:24,755 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:25,397 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:25,751 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:26,167 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:26,573 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:26,927 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:27,379 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:27,889 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:28,255 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:28,671 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:29,084 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:29,449 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:29,864 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:30,277 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:30,637 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:31,053 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:31,464 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:31,874 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:32,236 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:32,654 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:33,064 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:33,427 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:33,848 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:34,257 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:34,671 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:35,034 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:35,436 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:35,854 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:36,332 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:36,692 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:37,112 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:37,546 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:37,955 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:38,312 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:38,740 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:39,157 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:39,562 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:40,223 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:40,693 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:41,303 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:41,718 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:42,186 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:42,951 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:43,305 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:43,718 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:44,338 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:44,751 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:45,172 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:45,538 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:45,950 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:46,512 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:47,028 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:47,531 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:47,948 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:48,510 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:49,026 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:49,536 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:50,040 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:50,555 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:50,921 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:51,389 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:51,793 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:52,253 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:52,656 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:53,066 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:53,478 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:53,888 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:54,298 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:54,714 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:55,123 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:55,537 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:55,948 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:56,367 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:56,724 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:57,130 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:57,558 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:57,964 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:58,378 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:58,789 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:59,152 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:59,567 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:45:59,984 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:00,368 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:00,782 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:01,223 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:01,587 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:02,004 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:02,367 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:02,824 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:03,232 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:03,642 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:03,676 - server - INFO - Retrieved 1 customers (total: 1)
+2025-09-16 09:46:04,055 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:04,085 - server - INFO - Retrieved 1 customers (total: 1)
+2025-09-16 09:46:04,466 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:04,886 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:05,256 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:05,669 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:06,111 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:06,523 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:06,934 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:07,345 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:07,755 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:08,165 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:08,523 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:08,941 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:09,315 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:09,770 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:10,180 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:10,594 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:11,009 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:11,414 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:11,823 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:12,232 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:12,669 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:13,020 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:13,435 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:13,847 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:14,261 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:14,625 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:15,041 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:15,454 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:15,814 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:16,230 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:16,642 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:17,053 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:17,465 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:17,831 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:18,234 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:18,651 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:19,133 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:19,500 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:19,916 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:20,333 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:20,691 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:21,095 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:21,507 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:21,923 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:22,334 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:22,695 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:23,098 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:23,511 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:23,923 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:24,285 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:24,688 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:25,101 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:25,511 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:25,876 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:26,329 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:26,690 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:27,105 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:27,519 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:27,928 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:28,287 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:28,704 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:29,117 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:29,530 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:29,944 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:30,356 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:30,720 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:31,121 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:31,536 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:31,950 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:32,315 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:32,728 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:33,139 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:33,550 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:33,908 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:34,324 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:34,740 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:35,202 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:35,613 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:36,028 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:36,437 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:36,802 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:37,215 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:37,627 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:38,039 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:38,451 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:38,818 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:39,233 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:39,644 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:40,005 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:40,422 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:40,842 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:41,249 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:41,661 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:42,072 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:42,433 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:42,849 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:43,266 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:43,693 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:44,103 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:44,512 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:44,928 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:45,283 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:45,699 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:46,111 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:46,474 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:46,889 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:47,302 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:47,714 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:48,128 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:48,523 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:48,884 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:49,302 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:49,715 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:50,128 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:50,538 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:50,900 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:51,352 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:51,708 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:52,124 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:52,536 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:52,946 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:53,306 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:53,723 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:54,136 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:54,611 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:55,019 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:55,434 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:55,849 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:56,308 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:56,666 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:57,068 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:57,477 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:57,898 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:58,301 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:58,712 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:59,075 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:59,489 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:46:59,901 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:00,311 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:00,720 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:01,084 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:01,560 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:01,968 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:02,328 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:02,743 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:03,155 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:03,521 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:03,923 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:04,348 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:04,762 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:05,176 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:05,588 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:05,996 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:06,408 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:06,823 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:07,233 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:07,644 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:08,033 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:08,449 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:08,863 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:09,279 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:09,690 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:10,153 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:10,592 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:11,003 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:11,409 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:11,773 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:12,186 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:12,597 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:12,971 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:13,388 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:13,808 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:14,262 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:14,621 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:15,037 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:15,451 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:15,813 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:16,264 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:16,624 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:17,028 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:17,513 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:17,937 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:18,300 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:18,716 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:19,130 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:19,547 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:19,907 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:20,425 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:20,789 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:21,203 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:21,564 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:21,996 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:22,461 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:22,886 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:23,253 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:23,667 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:24,073 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:24,438 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:24,961 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:25,321 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:25,684 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:26,101 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:26,511 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:26,924 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:27,361 - watchfiles.main - INFO - 1 change detected
+2025-09-16 09:47:27,774 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:03,443 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:04,181 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:04,540 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:04,899 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:05,312 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:05,722 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:06,132 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:06,546 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:06,963 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:07,364 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:07,768 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:22:08,188 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:02,097 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:02,449 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:02,814 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:03,167 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:03,572 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:03,984 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:04,399 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:04,814 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:05,176 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:05,592 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:06,056 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:06,414 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:06,831 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:07,242 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:07,606 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:08,018 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:08,428 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:08,840 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:09,203 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:09,608 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:10,026 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:10,418 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:10,825 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:11,209 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:11,676 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:12,081 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:12,489 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:12,907 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:13,322 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:13,734 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:14,145 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:14,625 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:15,105 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:15,523 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:15,936 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:16,474 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:16,827 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:17,244 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:17,657 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:18,070 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:18,481 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:18,892 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:19,305 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:19,692 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:20,074 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:20,534 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:21,079 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:21,534 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:21,947 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:22,316 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:22,727 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:23,154 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:23,591 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:24,038 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:24,442 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:24,854 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:25,269 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:25,681 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:26,103 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:26,517 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:26,909 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:27,326 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:27,732 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:28,148 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:28,557 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:28,982 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:29,353 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:29,769 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:30,190 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:30,595 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:31,004 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:31,369 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:31,784 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:32,166 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:32,570 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:32,981 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:33,399 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:33,859 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:34,216 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:34,682 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:35,040 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:35,463 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:35,876 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:36,377 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:36,787 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:37,195 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:37,614 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:37,989 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:38,402 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:38,814 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:39,251 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:39,676 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:40,040 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:40,424 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:40,838 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:41,251 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:41,667 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:42,075 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:42,492 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:43,116 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:43,484 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:43,846 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:44,260 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:44,678 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:45,088 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:45,450 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:45,855 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:46,268 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:46,682 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:47,045 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:47,459 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:47,869 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:48,284 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:48,646 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:49,063 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:49,475 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:49,889 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:50,301 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:50,710 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:51,123 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:51,504 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:51,927 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:52,340 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:52,752 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:53,165 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:53,530 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:53,945 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:54,358 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:54,772 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:55,186 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:55,597 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:56,008 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:56,433 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:56,846 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:57,209 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:57,663 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:58,069 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:58,446 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:58,860 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:59,274 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:25:59,690 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:00,057 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:00,471 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:00,882 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:01,297 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:01,715 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:02,134 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:02,608 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:02,976 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:03,385 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:03,926 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:04,340 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:04,746 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:05,159 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:05,570 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:05,933 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:06,348 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:06,758 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:07,169 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:07,589 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:07,992 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:08,406 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:08,819 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:09,227 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:09,638 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:10,055 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:10,465 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:10,876 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:11,240 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:11,647 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:12,064 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:12,483 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:12,894 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:13,307 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:13,727 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:14,131 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:14,526 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:14,932 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:15,341 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:15,752 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:16,163 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:16,529 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:16,984 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:17,341 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:17,806 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:18,216 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:18,606 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:19,013 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:19,424 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:19,837 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:20,269 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:20,705 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:21,206 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:21,866 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:22,243 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:22,610 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:23,070 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:23,529 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:23,934 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:24,347 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:24,762 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:25,181 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:25,639 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:26,365 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:26,880 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:27,304 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:27,775 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:28,823 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:29,181 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:29,597 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:30,005 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:30,436 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:30,864 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:31,266 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:31,719 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:32,196 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:32,600 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:33,019 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:33,480 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:33,836 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:34,262 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:34,643 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:35,062 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:35,486 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:35,893 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:36,306 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:36,715 - watchfiles.main - INFO - 1 change detected
+2025-09-16 10:26:37,146 - watchfiles.main - INFO - 1 change detected
+2025-09-16 11:48:17,535 - server - INFO - Database indexes created successfully
+2025-09-16 11:48:17,537 - server - INFO - Database connected and indexes created successfully
+2025-09-16 11:55:22,212 - server - INFO - Database connection closed
+2025-09-16 11:58:31,927 - server - ERROR - Database connection failed: The resolution lifetime expired after 10.016 seconds: Server Do53:10.9.150.45@53 answered The DNS operation timed out.; Server Do53:10.36.117.180@53 answered The DNS operation timed out.; Server Do53:10.9.150.45@53 answered The DNS operation timed out.; Server Do53:10.36.117.180@53 answered The DNS operation timed out.; Server Do53:10.9.150.45@53 answered The DNS operation timed out.
+2025-09-16 11:58:32,286 - watchfiles.main - INFO - 1 change detected
+2025-09-16 12:00:01,706 - server - INFO - Database indexes created successfully
+2025-09-16 12:00:01,707 - server - INFO - Database connected and indexes created successfully
+2025-09-16 12:00:18,296 - server - INFO - Retrieved 1 customers (total: 1)
+2025-09-16 12:00:18,704 - server - INFO - Retrieved 1 customers (total: 1)
+2025-09-16 12:02:08,632 - server - INFO - New customer and user created: snjb05@yopmail.com by admin: smit@gmail.com
+2025-09-16 12:02:08,896 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 12:02:45,386 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 12:02:45,669 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 12:05:45,745 - server - INFO - Database indexes created successfully
+2025-09-16 12:05:45,746 - server - INFO - Database connected and indexes created successfully
+2025-09-16 12:06:16,795 - server - INFO - User logged in: smit@gmail.com
+2025-09-16 12:06:23,654 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 12:06:23,916 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 12:06:35,330 - server - INFO - User logged in: nill@gmail.com
+2025-09-16 14:47:27,734 - server - INFO - Database indexes created successfully
+2025-09-16 14:47:27,738 - server - INFO - Database connected and indexes created successfully
+2025-09-16 15:06:21,402 - server - INFO - User logged in: smit@gmail.com
+2025-09-16 15:06:25,855 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:06:26,086 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:06:46,332 - server - INFO - User logged in: nill@gmail.com
+2025-09-16 15:18:10,461 - server - INFO - User logged in: smit@gmail.com
+2025-09-16 15:18:11,941 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:18:12,049 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:22:06,988 - server - INFO - User logged in: nill@gmail.com
+2025-09-16 15:22:24,504 - server - INFO - User logged in: smit@gmail.com
+2025-09-16 15:22:24,522 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:24,527 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:24,528 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:25,533 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:25,534 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:25,535 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:27,540 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:27,542 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:27,543 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:31,549 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:31,551 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:31,552 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:33,107 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:33,110 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:33,112 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:34,114 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:34,118 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:36,120 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:36,124 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:36,181 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:36,183 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:36,185 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:37,186 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:37,189 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:39,196 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:39,197 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:39,198 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:40,129 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:40,132 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:43,202 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:43,204 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:43,206 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:22:52,218 - server - INFO - Database connection closed
+2025-09-16 15:22:59,852 - server - INFO - Database indexes created successfully
+2025-09-16 15:22:59,853 - server - INFO - Database connected and indexes created successfully
+2025-09-16 15:23:06,981 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:23:07,068 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:23:24,112 - server - INFO - User logged in: nill@gmail.com
+2025-09-16 15:30:42,400 - server - INFO - User logged in: smit@gmail.com
+2025-09-16 15:30:43,898 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:30:43,975 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:01,155 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:01,258 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:31,931 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:32,008 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:34,520 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:34,641 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:48,162 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:48,261 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:49,694 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:31:49,774 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:32:08,123 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:32:08,226 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:36:42,060 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:36:42,140 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:36:54,501 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:36:54,579 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:37:29,789 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:37:29,866 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:37:30,960 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:37:31,037 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:37:32,271 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:37:32,273 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-16 15:37:47,164 - server - INFO - Database connection closed
+2025-09-16 15:37:52,874 - server - INFO - Database indexes created successfully
+2025-09-16 15:37:52,875 - server - INFO - Database connected and indexes created successfully
+2025-09-16 15:38:00,993 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:38:01,094 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:38:13,553 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:38:13,776 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:48:11,203 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:48:11,405 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:48:32,854 - server - INFO - Database connection closed
+2025-09-16 15:48:38,928 - server - INFO - Database indexes created successfully
+2025-09-16 15:48:38,929 - server - INFO - Database connected and indexes created successfully
+2025-09-16 15:48:47,743 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:48:47,842 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:55:52,803 - server - INFO - Database connection closed
+2025-09-16 15:55:59,834 - server - INFO - Database indexes created successfully
+2025-09-16 15:55:59,835 - server - INFO - Database connected and indexes created successfully
+2025-09-16 15:56:15,630 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:56:15,839 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:56:33,100 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-16 15:56:33,191 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:24:53,621 - server - INFO - Database indexes created successfully
+2025-09-18 13:24:53,653 - server - INFO - Database connected and indexes created successfully
+2025-09-18 13:25:13,235 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:25:13,913 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:25:15,248 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:25:15,388 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:37:19,726 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:37:19,823 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:37:42,076 - server - INFO - Database connection closed
+2025-09-18 13:38:09,490 - server - INFO - Database indexes created successfully
+2025-09-18 13:38:09,491 - server - INFO - Database connected and indexes created successfully
+2025-09-18 13:38:22,381 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:38:22,530 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:40:27,912 - server - INFO - Database indexes created successfully
+2025-09-18 13:40:27,913 - server - INFO - Database connected and indexes created successfully
+2025-09-18 13:41:29,331 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:41:29,470 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:41:33,938 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:41:34,072 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:42:05,099 - server - INFO - New delivery created for customer: b47b26b1-f6e9-4d45-908d-f627985c22fc
+2025-09-18 13:42:15,147 - server - INFO - New delivery created for customer: b47b26b1-f6e9-4d45-908d-f627985c22fc
+2025-09-18 13:42:33,256 - server - INFO - New delivery created for customer: b47b26b1-f6e9-4d45-908d-f627985c22fc
+2025-09-18 13:42:38,241 - server - INFO - New delivery created for customer: b47b26b1-f6e9-4d45-908d-f627985c22fc
+2025-09-18 13:43:16,167 - server - INFO - User logged in: nill@gmail.com
+2025-09-18 13:43:16,919 - server - ERROR - Internal server error: [TypeError("'ObjectId' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-09-18 13:43:17,276 - server - ERROR - Internal server error: [TypeError("'ObjectId' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-09-18 13:43:20,013 - server - ERROR - Internal server error: [TypeError("'ObjectId' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-09-18 13:43:20,200 - server - ERROR - Internal server error: [TypeError("'ObjectId' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-09-18 13:43:20,876 - server - ERROR - Internal server error: [TypeError("'ObjectId' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-09-18 13:43:40,466 - server - INFO - User logged in: smit@gmail.com
+2025-09-18 13:43:43,815 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:43:43,984 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:43:54,667 - server - INFO - New delivery created for customer: cc7f08d8-3f38-45bd-86e7-32b2344e26e5
+2025-09-18 13:44:54,470 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:44:54,659 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:48:49,782 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:48:50,067 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:48:59,213 - server - INFO - New delivery created for customer: b47b26b1-f6e9-4d45-908d-f627985c22fc
+2025-09-18 13:56:15,325 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:56:15,721 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:56:23,145 - server - INFO - New delivery created for customer: b47b26b1-f6e9-4d45-908d-f627985c22fc
+2025-09-18 13:58:50,793 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:58:51,003 - server - INFO - Retrieved 2 customers (total: 2)
+2025-09-18 13:59:30,411 - server - INFO - New customer and user created: viyat@gmail.com by admin: smit@gmail.com
+2025-09-18 13:59:30,557 - server - INFO - Retrieved 3 customers (total: 3)
+2025-09-18 13:59:46,288 - server - INFO - Retrieved 3 customers (total: 3)
+2025-09-18 13:59:46,443 - server - INFO - Retrieved 3 customers (total: 3)
+2025-09-18 14:00:00,029 - server - INFO - Retrieved 3 customers (total: 3)
+2025-09-18 14:00:00,211 - server - INFO - Retrieved 3 customers (total: 3)
+2025-09-18 14:00:02,772 - server - INFO - Retrieved 3 customers (total: 3)
+2025-09-18 14:00:03,077 - server - INFO - Retrieved 3 customers (total: 3)
+2025-09-18 14:00:06,657 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-18 14:00:06,660 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-18 14:00:07,685 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-18 14:00:07,687 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-18 14:00:09,703 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-18 14:00:09,708 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-18 14:00:13,721 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-18 14:00:13,727 - server - WARNING - Rate limit exceeded for IP: 127.0.0.1
+2025-09-18 14:15:50,211 - server - INFO - Database connection closed
+2025-09-18 14:15:59,336 - server - INFO - Database indexes created successfully
+2025-09-18 14:15:59,337 - server - INFO - Database connected and indexes created successfully
+2025-09-18 14:27:56,404 - server - INFO - Retrieved 3 customers (total: 3)
+2025-09-18 14:27:56,499 - server - INFO - Retrieved 3 customers (total: 3)

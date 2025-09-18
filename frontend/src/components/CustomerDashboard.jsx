@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import CustomerCalendar from './CustomerCalendar.jsx';
 
 const CustomerDashboard = ({ user, onLogout }) => {
   const [profile, setProfile] = useState(null);
@@ -8,6 +9,7 @@ const CustomerDashboard = ({ user, onLogout }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' or 'calendar'
 
   const API_BASE_URL = 'http://localhost:8001/api';
 
@@ -131,6 +133,38 @@ const CustomerDashboard = ({ user, onLogout }) => {
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
+
+          {/* Navigation Tabs */}
+          <div className="mb-6">
+            <nav className="flex space-x-8">
+              <button
+                onClick={() => setActiveTab('dashboard')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'dashboard'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                📊 Dashboard
+              </button>
+              <button
+                onClick={() => setActiveTab('calendar')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'calendar'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                📅 My Calendar
+              </button>
+            </nav>
+          </div>
+
+          {/* Tab Content */}
+          {activeTab === 'calendar' ? (
+            <CustomerCalendar user={user} />
+          ) : (
+            <div>
           
           {/* Profile Card */}
           {profile && (
@@ -320,22 +354,24 @@ const CustomerDashboard = ({ user, onLogout }) => {
             </div>
           </div>
 
-          {/* Read-only Notice */}
-          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm text-blue-700">
-                  <strong>Note:</strong> This is a read-only dashboard. You can view your delivery and payment history, but cannot make changes. 
-                  Contact your admin for any updates or modifications needed.
-                </p>
+            {/* Read-only Notice */}
+            <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-blue-700">
+                    <strong>Note:</strong> This is a read-only dashboard. You can view your delivery and payment history, but cannot make changes. 
+                    Contact your admin for any updates or modifications needed.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
+          )}
         </div>
       </main>
     </div>

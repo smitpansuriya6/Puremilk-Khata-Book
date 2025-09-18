@@ -1285,6 +1285,7 @@ const MonthlyCalendarView = ({ customer }) => {
   const [editingEvening, setEditingEvening] = useState(null); // day number being edited for evening
   const [editMorningQuantity, setEditMorningQuantity] = useState('');
   const [editEveningQuantity, setEditEveningQuantity] = useState('');
+  const [saving, setSaving] = useState(false);
   
   // Check if current user is admin
   const isAdmin = () => {
@@ -1333,22 +1334,43 @@ const MonthlyCalendarView = ({ customer }) => {
       const startDate = new Date(year, month, 1);
       const endDate = new Date(year, month + 1, 0);
       
-      const response = await axios.get(`${API}/deliveries?customer_id=${customer.id}&start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`);
+      const response = await apiCall(`/deliveries?customer_id=${customer.id}&start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`);
       
       // Convert array to object with date as key
       const deliveryMap = {};
-      response.data.forEach(delivery => {
-        const date = new Date(delivery.delivery_date).getDate();
-        deliveryMap[date] = delivery;
+      console.log('=== FETCH DEBUG ===');
+      console.log('Fetching for month/year:', month, '/', year);
+      console.log('Raw delivery data received:', response.data);
+      
+      (response.data || []).forEach(delivery => {
+        // Parse delivery date - handle both ISO string and date objects
+        const deliveryDate = new Date(delivery.delivery_date);
+        const date = deliveryDate.getUTCDate(); // Use UTC to match how we're storing dates
+        const deliveryYear = deliveryDate.getUTCFullYear();
+        const deliveryMonth = deliveryDate.getUTCMonth();
+        
+        console.log('Processing delivery:', delivery.delivery_date, 'parsed as:', deliveryDate);
+        console.log('Extracted - Day:', date, 'Month:', deliveryMonth, 'Year:', deliveryYear);
+        console.log('Comparing with viewing - Month:', month, 'Year:', year);
+        
+        // Only include deliveries for the current viewing month/year
+        if (deliveryYear === year && deliveryMonth === month) {
+          console.log('✓ Including delivery for day:', date);
+          if (!deliveryMap[date]) {
+            deliveryMap[date] = {};
+          }
+          // Group by delivery time (morning/evening)
+          deliveryMap[date][delivery.delivery_time] = delivery;
+        } else {
+          console.log('✗ Excluding delivery (wrong month/year)');
+        }
       });
       
       setDeliveries(deliveryMap);
-      console.log('Fetched deliveries:', deliveryMap);
+      console.log('Fetched deliveries for customer:', customer?.id, deliveryMap);
       
       // Trigger population after deliveries are loaded
-      setTimeout(() => {
-        if (customer) populateDefaultQuantities();
-      }, 100);
+      if (customer) populateDefaultQuantities();
       
     } catch (error) {
       console.error('Error fetching deliveries:', error);
@@ -1359,11 +1381,24 @@ const MonthlyCalendarView = ({ customer }) => {
   }, [customer, currentDate]);
 
   useEffect(() => {
-    fetchMonthlyDeliveries();
-  }, [fetchMonthlyDeliveries]);
+    if (customer) {
+      // Clear deliveries when customer changes to avoid showing old data
+      setDeliveries({});
+      fetchMonthlyDeliveries();
+    } else {
+      // Clear deliveries when no customer is selected
+      setDeliveries({});
+    }
+  }, [customer, currentDate, fetchMonthlyDeliveries]);
 
   // Auto-populate when customer or month changes
   useEffect(() => {
+    // Clear editing states when customer changes
+    setEditingMorning(null);
+    setEditingEvening(null);
+    setEditMorningQuantity('');
+    setEditEveningQuantity('');
+    
     if (customer) {
       populateDefaultQuantities();
     } else {
@@ -1373,7 +1408,12 @@ const MonthlyCalendarView = ({ customer }) => {
 
   // Auto-populate calendar with customer's morning/evening deliveries from current date onwards
   const populateDefaultQuantities = useCallback(() => {
-    if (!customer) return;
+    if (!customer) {
+      setDailyQuantities({});
+      return;
+    }
+    
+    console.log('Populating default quantities for customer:', customer.id, 'deliveries:', deliveries);
     
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -1455,6 +1495,8 @@ const MonthlyCalendarView = ({ customer }) => {
     }
     // For past months: don't populate anything (newQuantities remains empty)
     
+    console.log('Setting daily quantities:', newQuantities);
+    // Always replace the entire state, don't merge with previous customer data
     setDailyQuantities(newQuantities);
   }, [customer, currentDate, deliveries]);
 
@@ -1465,27 +1507,37 @@ const MonthlyCalendarView = ({ customer }) => {
     return `${year}-${month}-${day}`;
   };
 
+  // Check if a day is editable (current day or future)
+  const isDayEditable = (day) => {
+    const today = new Date();
+    const currentDay = today.getDate();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    
+    const calendarYear = currentDate.getFullYear();
+    const calendarMonth = currentDate.getMonth();
+    
+    // If viewing a future month, all days are editable
+    if (calendarYear > currentYear || (calendarYear === currentYear && calendarMonth > currentMonth)) {
+      return true;
+    }
+    
+    // If viewing current month, only current day and future days are editable
+    if (calendarYear === currentYear && calendarMonth === currentMonth) {
+      return day >= currentDay;
+    }
+    
+    // If viewing past month, no days are editable
+    return false;
+  };
+
   // Handle click on morning delivery
   const handleMorningClick = (day) => {
     if (!customer || !day || !isAdmin()) return;
     
-    // Prevent editing in past months
-    const today = new Date();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
-    const viewingYear = currentDate.getFullYear();
-    const viewingMonth = currentDate.getMonth();
-    
-    const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
-    if (isPastMonth) {
-      alert('Cannot edit deliveries in past months');
-      return;
-    }
-    
-    // For current month, prevent editing past dates
-    const isCurrentMonth = (viewingYear === currentYear && viewingMonth === currentMonth);
-    if (isCurrentMonth && day < today.getDate()) {
-      alert('Cannot edit past dates in current month');
+    // Check if day is editable (current day or future only)
+    if (!isDayEditable(day)) {
+      alert('Cannot edit deliveries for past days. You can only edit current day and future days.');
       return;
     }
     
@@ -1507,23 +1559,9 @@ const MonthlyCalendarView = ({ customer }) => {
   const handleEveningClick = (day) => {
     if (!customer || !day || !isAdmin()) return;
     
-    // Prevent editing in past months
-    const today = new Date();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
-    const viewingYear = currentDate.getFullYear();
-    const viewingMonth = currentDate.getMonth();
-    
-    const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
-    if (isPastMonth) {
-      alert('Cannot edit deliveries in past months');
-      return;
-    }
-    
-    // For current month, prevent editing past dates
-    const isCurrentMonth = (viewingYear === currentYear && viewingMonth === currentMonth);
-    if (isCurrentMonth && day < today.getDate()) {
-      alert('Cannot edit past dates in current month');
+    // Check if day is editable (current day or future only)
+    if (!isDayEditable(day)) {
+      alert('Cannot edit deliveries for past days. You can only edit current day and future days.');
       return;
     }
     
@@ -1546,39 +1584,92 @@ const MonthlyCalendarView = ({ customer }) => {
     if (!customer || !editMorningQuantity || !isAdmin()) return;
     
     const numericValue = parseFloat(editMorningQuantity);
-    if (isNaN(numericValue) || numericValue <= 0) return;
+    if (isNaN(numericValue) || numericValue <= 0) {
+      alert('Please enter a valid quantity');
+      return;
+    }
     
+    setSaving(true);
     const morningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-morning`;
     
-    // If there's an existing morning delivery, update it via API
-    if (deliveries[day]?.morning) {
-      try {
-        const response = await axios.put(`${API}/deliveries/${deliveries[day].morning.id}`, {
-          quantity: numericValue
+    try {
+      // If there's an existing morning delivery, update it via API
+      if (deliveries[day]?.morning) {
+        const response = await apiCall(`/deliveries/${deliveries[day].morning.id}`, {
+          method: 'PUT',
+          data: { quantity: numericValue }
         });
-        console.log('Morning update response:', response);
-        setEditingMorning(null);
-        setEditMorningQuantity('');
-        await fetchMonthlyDeliveries();
-      } catch (error) {
-        console.error('Error updating morning delivery:', error);
-        alert('Error saving morning delivery: ' + (error.response?.data?.detail || error.message));
-      }
-    } else {
-      // Update local daily quantities for display
-      setDailyQuantities(prev => ({
-        ...prev,
-        [morningKey]: {
-          quantity: numericValue,
-          customer: customer,
-          date: `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`,
-          time: 'morning',
-          isDefault: false,
-          addedAt: new Date().toISOString()
+        console.log('Morning delivery updated:', response.data);
+      } else {
+        // Create new delivery via API
+        // Use noon time to avoid timezone issues when converting to ISO
+        const deliveryDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 12, 0, 0);
+        
+        // Validate customer and data
+        if (!customer || !customer.id) {
+          throw new Error('Customer not selected or customer ID missing');
         }
-      }));
+        
+        if (numericValue <= 0 || numericValue > 50) {
+          throw new Error('Quantity must be between 0 and 50 liters');
+        }
+        
+        const deliveryData = {
+          customer_id: customer.id,
+          delivery_date: deliveryDate.toISOString(),
+          delivery_time: 'morning',
+          quantity: numericValue
+        };
+        
+        console.log('=== SAVE DEBUG ===');
+        console.log('Saving for day:', day, 'in month/year:', currentDate.getMonth(), '/', currentDate.getFullYear());
+        console.log('Delivery date details - Year:', currentDate.getFullYear(), 'Month:', currentDate.getMonth(), 'Day:', day);
+        console.log('Generated delivery date (local):', deliveryDate);
+        console.log('Generated delivery date (ISO/UTC):', deliveryDate.toISOString());
+        console.log('Sending delivery data:', deliveryData);
+        console.log('Customer object:', customer);
+        
+        const response = await apiCall('/deliveries', {
+          method: 'POST',
+          data: deliveryData
+        });
+        console.log('Morning delivery created:', response.data);
+      }
+      
+      console.log('✓ Save successful, now fetching fresh data...');
+      
       setEditingMorning(null);
       setEditMorningQuantity('');
+      
+      // Refresh deliveries to get latest data from server
+      await fetchMonthlyDeliveries();
+      
+      console.log('✓ Fresh data fetched after save');
+      
+    } catch (error) {
+      console.error('Error saving morning delivery:', error);
+      console.error('Error details:', {
+        response: error.response,
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data
+      });
+      
+      let errorMessage = 'Unknown error occurred';
+      if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else {
+        errorMessage = JSON.stringify(error, null, 2);
+      }
+      alert('Error saving morning delivery: ' + errorMessage);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -1587,39 +1678,76 @@ const MonthlyCalendarView = ({ customer }) => {
     if (!customer || !editEveningQuantity || !isAdmin()) return;
     
     const numericValue = parseFloat(editEveningQuantity);
-    if (isNaN(numericValue) || numericValue <= 0) return;
+    if (isNaN(numericValue) || numericValue <= 0) {
+      alert('Please enter a valid quantity');
+      return;
+    }
     
+    setSaving(true);
     const eveningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-evening`;
     
-    // If there's an existing evening delivery, update it via API
-    if (deliveries[day]?.evening) {
-      try {
-        const response = await axios.put(`${API}/deliveries/${deliveries[day].evening.id}`, {
-          quantity: numericValue
+    try {
+      // If there's an existing evening delivery, update it via API
+      if (deliveries[day]?.evening) {
+        const response = await apiCall(`/deliveries/${deliveries[day].evening.id}`, {
+          method: 'PUT',
+          data: { quantity: numericValue }
         });
-        console.log('Evening update response:', response);
-        setEditingEvening(null);
-        setEditEveningQuantity('');
-        await fetchMonthlyDeliveries();
-      } catch (error) {
-        console.error('Error updating evening delivery:', error);
-        alert('Error saving evening delivery: ' + (error.response?.data?.detail || error.message));
-      }
-    } else {
-      // Update local daily quantities for display
-      setDailyQuantities(prev => ({
-        ...prev,
-        [eveningKey]: {
-          quantity: numericValue,
-          customer: customer,
-          date: `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`,
-          time: 'evening',
-          isDefault: false,
-          addedAt: new Date().toISOString()
+        console.log('Evening delivery updated:', response.data);
+      } else {
+        // Create new delivery via API
+        // Use noon time to avoid timezone issues when converting to ISO
+        const deliveryDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 12, 0, 0);
+        
+        // Validate customer and data
+        if (!customer || !customer.id) {
+          throw new Error('Customer not selected or customer ID missing');
         }
-      }));
+        
+        if (numericValue <= 0 || numericValue > 50) {
+          throw new Error('Quantity must be between 0 and 50 liters');
+        }
+        
+        const deliveryData = {
+          customer_id: customer.id,
+          delivery_date: deliveryDate.toISOString(),
+          delivery_time: 'evening',
+          quantity: numericValue
+        };
+        
+        console.log('Sending delivery data:', deliveryData);
+        console.log('Customer object:', customer);
+        
+        const response = await apiCall('/deliveries', {
+          method: 'POST',
+          data: deliveryData
+        });
+        console.log('Evening delivery created:', response.data);
+      }
+      
       setEditingEvening(null);
       setEditEveningQuantity('');
+      
+      // Refresh deliveries to get latest data from server
+      await fetchMonthlyDeliveries();
+      
+    } catch (error) {
+      console.error('Error saving evening delivery:', error);
+      let errorMessage = 'Unknown error occurred';
+      if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else {
+        errorMessage = JSON.stringify(error, null, 2);
+      }
+      alert('Error saving evening delivery: ' + errorMessage);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -1745,14 +1873,27 @@ const MonthlyCalendarView = ({ customer }) => {
             <div
               key={index}
               className={`min-h-[100px] p-2 border-b border-r border-gray-200 ${
-                day === null ? 'bg-gray-50' : 'bg-white hover:bg-gray-50'
+                day === null 
+                  ? 'bg-gray-50' 
+                  : !isDayEditable(day)
+                    ? 'bg-gray-100 opacity-60' 
+                    : 'bg-white hover:bg-gray-50'
               }`}
             >
               {day && (
                 <div className="h-full flex flex-col">
                   {/* Day number */}
                   <div className="flex justify-between items-start mb-2">
-                    <span className="text-sm font-medium text-gray-900">{day}</span>
+                    <span className={`text-sm font-medium ${
+                      !isDayEditable(day) 
+                        ? 'text-gray-400' 
+                        : 'text-gray-900'
+                    }`}>
+                      {day}
+                      {!isDayEditable(day) && (
+                        <span className="ml-1 text-xs text-gray-400">🔒</span>
+                      )}
+                    </span>
                   </div>
 
                   {/* Morning/Evening Delivery info */}
@@ -1784,9 +1925,10 @@ const MonthlyCalendarView = ({ customer }) => {
                             <div className="flex gap-1 mt-1">
                               <button
                                 onClick={() => handleMorningSave(day)}
-                                className="flex-1 px-1 py-0.5 text-xs bg-green-600 text-white rounded hover:bg-green-700"
+                                disabled={saving}
+                                className="flex-1 px-1 py-0.5 text-xs bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
-                                Save
+                                {saving ? 'Saving...' : 'Save'}
                               </button>
                               <button
                                 onClick={() => {
@@ -1800,28 +1942,33 @@ const MonthlyCalendarView = ({ customer }) => {
                             </div>
                           </div>
                         ) : (
-                          <div onClick={() => isAdmin() && handleMorningClick(day)} className={isAdmin() ? 'cursor-pointer hover:bg-yellow-100' : ''}>
+                          <div 
+                            onClick={() => isAdmin() && isDayEditable(day) && handleMorningClick(day)} 
+                            className={isAdmin() && isDayEditable(day) ? 'cursor-pointer hover:bg-yellow-100' : isDayEditable(day) ? '' : 'cursor-not-allowed opacity-60'}
+                          >
                             {(() => {
                               const morningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-morning`;
                               const morningQuantity = dailyQuantities[morningKey];
                               const morningDelivery = deliveries[day]?.morning;
                               
-                              // Check if this is a past month or past date in current month
-                              const today = new Date();
-                              const currentMonth = today.getMonth();
-                              const currentYear = today.getFullYear();
-                              const viewingYear = currentDate.getFullYear();
-                              const viewingMonth = currentDate.getMonth();
+                              // Debug logging for rendering
+                              if (day === new Date().getDate()) {
+                                console.log('=== RENDER DEBUG (Current Day) ===');
+                                console.log('Day:', day, 'Key:', morningKey);
+                                console.log('Morning delivery (DB):', morningDelivery);
+                                console.log('Morning quantity (local):', morningQuantity);
+                                console.log('All deliveries for day:', deliveries[day]);
+                                console.log('All daily quantities:', Object.keys(dailyQuantities));
+                              }
                               
-                              const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
-                              const isPastDate = (viewingYear === currentYear && viewingMonth === currentMonth && day < today.getDate());
-                              const canEdit = isAdmin() && !isPastMonth && !isPastDate;
+                              // Check if this day is editable
+                              const canEdit = isAdmin() && isDayEditable(day);
                               
                               if (morningDelivery) {
                                 return (
                                   <div>
                                     <div className="text-xs font-semibold text-green-600">
-                                      {morningDelivery.quantity}L {(isAdmin() && !isPastMonth && !isPastDate) && <span className="text-gray-400">✎</span>}
+                                      {morningDelivery.quantity}L {canEdit && <span className="text-gray-400">✎</span>}
                                     </div>
                                     <div className={`text-xs px-1 py-0.5 rounded text-center ${
                                       morningDelivery.status === 'delivered' 
@@ -1881,9 +2028,10 @@ const MonthlyCalendarView = ({ customer }) => {
                             <div className="flex gap-1 mt-1">
                               <button
                                 onClick={() => handleEveningSave(day)}
-                                className="flex-1 px-1 py-0.5 text-xs bg-green-600 text-white rounded hover:bg-green-700"
+                                disabled={saving}
+                                className="flex-1 px-1 py-0.5 text-xs bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
-                                Save
+                                {saving ? 'Saving...' : 'Save'}
                               </button>
                               <button
                                 onClick={() => {
@@ -1897,22 +2045,17 @@ const MonthlyCalendarView = ({ customer }) => {
                             </div>
                           </div>
                         ) : (
-                          <div onClick={() => isAdmin() && handleEveningClick(day)} className={isAdmin() ? 'cursor-pointer hover:bg-blue-100' : ''}>
+                          <div 
+                            onClick={() => isAdmin() && isDayEditable(day) && handleEveningClick(day)} 
+                            className={isAdmin() && isDayEditable(day) ? 'cursor-pointer hover:bg-blue-100' : isDayEditable(day) ? '' : 'cursor-not-allowed opacity-60'}
+                          >
                             {(() => {
                               const eveningKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}-evening`;
                               const eveningQuantity = dailyQuantities[eveningKey];
                               const eveningDelivery = deliveries[day]?.evening;
                               
-                              // Check if this is a past month or past date in current month
-                              const today = new Date();
-                              const currentMonth = today.getMonth();
-                              const currentYear = today.getFullYear();
-                              const viewingYear = currentDate.getFullYear();
-                              const viewingMonth = currentDate.getMonth();
-                              
-                              const isPastMonth = (viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth));
-                              const isPastDate = (viewingYear === currentYear && viewingMonth === currentMonth && day < today.getDate());
-                              const canEdit = isAdmin() && !isPastMonth && !isPastDate;
+                              // Check if this day is editable
+                              const canEdit = isAdmin() && isDayEditable(day);
                               
                               if (eveningDelivery) {
                                 return (
@@ -2234,7 +2377,7 @@ const CustomerManagementWithCalendar = () => {
               >
                 ← Back to Customer Selection
               </button>
-              <MonthlyCalendarView customer={selectedCustomer} />
+              <MonthlyCalendarView key={selectedCustomer?.id} customer={selectedCustomer} />
             </div>
           )}
         </div>

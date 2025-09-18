@@ -42,7 +42,7 @@ class ErrorHandler {
     } else if (error.request) {
       // Network error or timeout
       if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
-        return 'Request timed out. Please check if the backend server is running on http://localhost:8001';
+        return 'Request timed out. Please check if the backend server is running on http://localhost:5000';
       }
       return 'Network error. Please check your connection and ensure the backend server is running';
     } else {
